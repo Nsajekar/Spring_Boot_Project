@@ -1,32 +1,62 @@
 {"properties": [
   {
-    "name": "spring.mariadb.datasource.url",
-    "type": "java.lang.String",
-    "description": "A description for 'spring.mariadb.datasource.url'"
-  },
-  {
-    "name": "spring.mariadb.datasource.usr",
-    "type": "java.lang.String",
-    "description": "A description for 'spring.mariadb.datasource.usr'"
-  },
-  {
-    "name": "spring.mariadb.datasource.pwd",
-    "type": "java.lang.String",
-    "description": "A description for 'spring.mariadb.datasource.pwd'"
-  },
-  {
-    "name": "spring.mariadb.datasource.driver-class-name",
-    "type": "java.lang.String",
-    "description": "A description for 'spring.mariadb.datasource.driver-class-name'"
-  },
-  {
     "name": "LOG_PATH",
     "type": "java.lang.String",
     "description": "A description for 'LOG_PATH'"
   },
   {
-    "name": "LOG_PATH",
+    "name": "app.datasource.active",
     "type": "java.lang.String",
-    "description": "A description for 'LOG_PATH'"
+    "description": "A description for 'app.datasource.active'"
+  },
+  {
+    "name": "spring.datasource.mysql.url",
+    "type": "java.lang.String",
+    "description": "A description for 'spring.datasource.mysql.url'"
+  },
+  {
+    "name": "spring.datasource.mysql.username",
+    "type": "java.lang.String",
+    "description": "A description for 'spring.datasource.mysql.username'"
+  },
+  {
+    "name": "spring.datasource.mysql.password",
+    "type": "java.lang.String",
+    "description": "A description for 'spring.datasource.mysql.password'"
+  },
+  {
+    "name": "spring.datasource.mysql.driver-class-name",
+    "type": "java.lang.String",
+    "description": "A description for 'spring.datasource.mysql.driver-class-name'"
+  },
+  {
+    "name": "spring.datasource.mariadb.url",
+    "type": "java.lang.String",
+    "description": "A description for 'spring.datasource.mariadb.url'"
+  },
+  {
+    "name": "spring.datasource.mariadb.driver-class-name",
+    "type": "java.lang.String",
+    "description": "A description for 'spring.datasource.mariadb.driver-class-name'"
+  },
+  {
+    "name": "spring.datasource.mariadb.pwd",
+    "type": "java.lang.String",
+    "description": "A description for 'spring.datasource.mariadb.pwd'"
+  },
+  {
+    "name": "spring.datasource.mysql.pwd",
+    "type": "java.lang.String",
+    "description": "A description for 'spring.datasource.mysql.pwd'"
+  },
+  {
+    "name": "spring.datasource.mysql.usr",
+    "type": "java.lang.String",
+    "description": "A description for 'spring.datasource.mysql.usr'"
+  },
+  {
+    "name": "spring.datasource.mariadb.usr",
+    "type": "java.lang.String",
+    "description": "A description for 'spring.datasource.mariadb.usr'"
   }
 ]}
