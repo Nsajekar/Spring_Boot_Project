@@ -44,7 +44,7 @@ public class DataBaseConfig {
     @Bean
     DataSource dataSource() throws IllegalArgumentException {
         DriverManagerDataSource dataSource = new DriverManagerDataSource();
-        if("MARIADB".equals(activeDatabase.toString())) {
+        if("MARIADB".equals(activeDatabase)) {
         	dataSource.setUrl(mariaUrl);
         	dataSource.setUsername(mariaUsr);
         	dataSource.setPassword(mariaPwd);
