@@ -9,19 +9,19 @@
 	
 	<Appender>
 		<!-- File Appender -->
-		<RollingFile type="File" name="FileAppender" fileName="${LOG_PATH}/${LOG_FILE_NAME}"
+		<RollingFile type="File" name="RollingFileAppender" fileName="${LOG_PATH}/${LOG_FILE_NAME}"
 			filePattern="${LOG_PATH}/application-%d{yyyy-MM-dd-HH-mm-ss}-%i.log">
 			<PatternLayout>
 				<pattern>${LOG_PATTERN}</pattern>
 			</PatternLayout>
 			<Policies>
-				<CronTriggeringPolicy schedule="0 0 0 * * ?" />
 				<SizeBasedTriggeringPolicy size="100MB" />
+				<TimeBasedTriggeringPolicy/>
 			</Policies>
 		</RollingFile>
 		
 		<!-- Console Appender -->
-		<Console name="Console" target="SYSTEM.OUT">
+		<Console name="ConsoleAppender" target="SYSTEM.OUT">
 			<PatternLayout>
 				<pattern>${LOG_PATTERN}</pattern>
 			</PatternLayout>
@@ -31,20 +31,15 @@
 	<Loggers>
 		<!-- Custom Logger -->
 		<Logger name="com.spring" level="info" additivity="false">
-			<AppenderRef ref="Console" />
-			<AppenderRef ref="FileAppender" />
+			<AppenderRef ref="ConsoleAppender" />
+			<AppenderRef ref="RollingFileAppender" />
 		</Logger>
 		<!-- Root Logger -->
 		<Root level="info">
-			<AppenderRef ref="Console" />
-			<AppenderRef ref="FileAppender" />
+			<AppenderRef ref="ConsoleAppender" />
+			<AppenderRef ref="RollingFileAppender" />
 		</Root>
 	</Loggers>
 </Configuration>
 
-<!-- Console Appender -->
-	<!--<Appender type="Console" name="Console">
-		<PatternLayout>
-			<Pattern>${LOG_PATTERN}</Pattern>
-		</PatternLayout>
-	</Appender>-->
+<!--<CronTriggeringPolicy schedule="0 0 0 * * ?" />-->
