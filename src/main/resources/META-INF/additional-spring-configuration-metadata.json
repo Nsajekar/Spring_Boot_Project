@@ -58,5 +58,15 @@
     "name": "spring.datasource.mariadb.usr",
     "type": "java.lang.String",
     "description": "A description for 'spring.datasource.mariadb.usr'"
+  },
+  {
+    "name": "LOG_FILE_NAME",
+    "type": "java.lang.String",
+    "description": "A description for 'LOG_FILE_NAME'"
+  },
+  {
+    "name": "LOG_PATTERN",
+    "type": "java.lang.String",
+    "description": "A description for 'LOG_PATTERN'"
   }
 ]}
