@@ -10,7 +10,7 @@ import io.swagger.v3.oas.models.info.License;
 @Configuration
 public class SwaggerConfig { 
   
-   public OpenAPI SwaggerApi() { 
+   public OpenAPI swaggerApi() { 
 	   return new OpenAPI()
                .info(new Info()
                        .title("Custom Swagger API")
