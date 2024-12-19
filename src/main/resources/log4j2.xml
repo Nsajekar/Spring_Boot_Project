@@ -7,6 +7,8 @@
 	status="WARN" monitorInterval="30">
 	<Properties>
 		<!-- Hardcoded log file path -->
+		<!--<Property name="LOG_PATH">C:\NITESH\MY_SPACE\SPRING_BOOT_LOGS\logs</Property>-->
+		<!-- DYNAMIC LOG FILE PATH -->
 		<Property name="LOG_PATH">${sys:LOG_PATH}</Property>
 		<Property name="LOG_FILE_NAME">application.log</Property>
 		<Property name="LOG_PATTERN">%d{yyyy-MM-dd HH:mm:ss} %-5p [%t] %c{1} -%msg%n</Property>
@@ -41,49 +43,3 @@
 		</Root>
 	</Loggers>
 </Configuration>
-
-
-<!--<Configuration xmlns="http://logging.apache.org/log4j/2.0/config"
-	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-	xsi:schemaLocation="http://logging.apache.org/log4j/2.0/config 
-						schemas/Log4j-config.xsd"
-	status="WARN" monitorInterval="30">
-	<Properties>
-		 Hardcoded log file path 
-		<Property name="LOG_PATH">C:\NITESH\MY_SPACE\SPRING_BOOT_LOGS\logs</Property>
-		<Property name="LOG_FILE_NAME">application.log</Property>
-		<Property name="LOG_PATTERN">%d{yyyy-MM-dd HH:mm:ss} %-5p [%t] %c{1} -%msg%n</Property>
-	</Properties>
-
-	<Appenders>
-		 File Appender 
-		<RollingFile name="appLog" fileName="${LOG_PATH}\${LOG_FILE_NAME}"
-			filePattern="${LOG_PATH}/application-%d{yyyy-MM-dd-HH-mm-ss}-%i.log">
-			<PatternLayout pattern="${LOG_PATTERN}" />
-			<Policies>
-				<SizeBasedTriggeringPolicy size="100MB" />
-				<CronTriggeringPolicy schedule="0 0 0 * * ?" />
-			</Policies>
-		</RollingFile>
-
-		 Console Appender 
-		<Console name="consoleLog" target="SYSTEM_OUT" follow="true">
-			<PatternLayout pattern="${LOG_PATTERN}" />
-		</Console>
-	</Appenders>
-
-	<Loggers>
-		 Custom Logger 
-		<Logger name="com.spring" level="info" additivity="false">
-			<AppenderRef ref="consoleLog" />
-			<AppenderRef ref="appLog" />
-		</Logger>
-		 Root Logger 
-		<Root level="info">
-			<AppenderRef ref="consoleLog" />
-		</Root>
-	</Loggers>
-</Configuration>-->
-
-<!--<CronTriggeringPolicy
-schedule="0 0 0 * * ?" />-->
