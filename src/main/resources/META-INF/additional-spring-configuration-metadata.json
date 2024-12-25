@@ -68,5 +68,10 @@
     "name": "LOG_PATTERN",
     "type": "java.lang.String",
     "description": "A description for 'LOG_PATTERN'"
+  },
+  {
+    "name": "annotation.logging.aspect.enable",
+    "type": "java.lang.String",
+    "description": "Valid Values true/false"
   }
 ]}
