@@ -11,6 +11,7 @@ import org.aspectj.lang.annotation.Around;
 import org.aspectj.lang.annotation.Aspect;
 import org.aspectj.lang.annotation.Before;
 import org.aspectj.lang.reflect.MethodSignature;
+import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.stereotype.Component;
 
 import com.spring.main.utils.LoggerUtils;
@@ -20,11 +21,11 @@ import lombok.experimental.FieldDefaults;
 /**
  * @author Nitesh
  * Notes : 
- * 1.WHEN WE HAVE MULIPLE ASPECT THIS ANNOTATION IS USED TO GEVE PREFERENCE IN RUNNING LOWEST THE NUMBER GETS MOST PRIORITY
+ * 1.WHEN WE HAVE MULIPLE ASPECT THIS ANNOTATION IS USED TO GIVE PREFERENCE IN RUNNING LOWEST THE NUMBER GETS MOST PRIORITY @ORDER(int value)
  */
 @Aspect
 @Component
-//@ConditionalOnProperty(name="annotation.logging.aspect.enable", havingValue = "false", matchIfMissing=true)
+@ConditionalOnProperty(name="annotation.logging.aspect.enable", havingValue = "false", matchIfMissing=true)
 @FieldDefaults(level = AccessLevel.PRIVATE)
 public class LoggingPointcutAspect {
 	
