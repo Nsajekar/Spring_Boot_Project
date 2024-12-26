@@ -8,7 +8,7 @@ import org.springframework.stereotype.Component;
 @Component
 public class PointcutExpressionsUtil {
 
-	@Pointcut("execution (*com.spring.main.controller.*.*(..))")
+	@Pointcut("execution (* com.spring.main.controller.*.*(..))")
 	public void forControllerLog(){}
 	
 	@Pointcut("execution (* com.spring.main.service.*.*(..))")

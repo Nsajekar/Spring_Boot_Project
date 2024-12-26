@@ -23,10 +23,10 @@ public class SpringBootProjectApplication{
 	
 	public static void main(String[] args) {
 		SpringApplication.run(SpringBootProjectApplication.class, args);
-		logger.info("Application Started..."); 
-		logger.debug("Application Started...");
-		logger.error("Application Started...");
-		logger.warn("Application Started...");
+		logger.info("INFO : Application Started..."); 
+		logger.debug("DEBUG : Application Started...");
+		logger.error("ERROR : Application Started...");
+		logger.warn("WARN : Application Started...");
 	}
 
 }
