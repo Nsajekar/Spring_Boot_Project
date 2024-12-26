@@ -37,43 +37,49 @@ public class LoggingPointcutAspect {
 		this.log = log;
 	}
 	
+	static {
+		logger.info("Loading LoggingPointcutAspect Class.");
+	}
+	
 	//For Controller & Service & Repository
 	@Before("com.spring.main.aspect.PointcutExpressionsUtil.forlog()")
 	public void doBeforeLog(JoinPoint joinPoint){
 		MethodSignature methodSign = (MethodSignature) joinPoint.getSignature();
-		log.doLog(2,methodSign.getDeclaringTypeName(), methodSign.getMethod().getName(), "Started.....");
+		log.doLog(2,methodSign.getDeclaringType().getSimpleName(), methodSign.getMethod().getName(), "Started.....");
 	}
 	
 	//For Controller & Service & Repository
 	@After("com.spring.main.aspect.PointcutExpressionsUtil.forlog()")
 	public void doAfterLog(JoinPoint joinPoint){
 		MethodSignature methodSign = (MethodSignature) joinPoint.getSignature();
-		log.doLog(2, methodSign.getDeclaringTypeName(), methodSign.getMethod().getName(), "Ended.....");
+		log.doLog(2, methodSign.getDeclaringType().getSimpleName(), methodSign.getMethod().getName(), "Ended.....");
 	}
 	
 	//For Repository 
 	@AfterReturning(pointcut = "com.spring.main.aspect.PointcutExpressionsUtil.forDaoLog()" ,returning = "result")
 	public void doAfterReturningLog(JoinPoint joinPoint,Object result) throws IllegalArgumentException, IllegalAccessException{
 		MethodSignature methodSign = (MethodSignature) joinPoint.getSignature();
-		log.doLog(2, methodSign.getDeclaringTypeName(), methodSign.getMethod().getName(), result.toString());
+		log.doLog(2, methodSign.getDeclaringType().getSimpleName(), methodSign.getMethod().getName(), result.toString());
 	}
 	
 	//For Repository Before And After Combine
 	@Around("com.spring.main.aspect.PointcutExpressionsUtil.forDaoLog()")
-	public Object aroundAdvice(ProceedingJoinPoint joinPoint) throws Throwable{
+	public Object aroundAdvice(ProceedingJoinPoint joinPoint) throws Throwable {
 		MethodSignature methodSign = (MethodSignature) joinPoint.getSignature();
-		log.doLog(2,methodSign.getDeclaringTypeName(), methodSign.getMethod().getName(), "Started.....");
+		log.doLog(2, methodSign.getDeclaringType().getSimpleName(), methodSign.getMethod().getName(), "Started.....");
 		long beginTime = System.currentTimeMillis();
-		Object obj = null ;
-		try{
-	    obj = joinPoint.proceed();
-		}catch(Exception e){
-			log.doLog(2,  methodSign.getDeclaringTypeName(), methodSign.getMethod().getName(), "Exception Occured :" + e);
+		Object obj = null;
+		try {
+			obj = joinPoint.proceed();
+		} catch (Exception e) {
+			log.doLog(2, methodSign.getDeclaringType().getSimpleName(), methodSign.getMethod().getName(),
+					"Exception Occured :" + e);
 		}
 		long endTime = System.currentTimeMillis();
 		long timeTaken = endTime - beginTime;
-		log.doLog(2, methodSign.getDeclaringTypeName(), methodSign.getMethod().getName(),"Time taken to Execute is :" + timeTaken);
-		log.doLog(2,methodSign.getDeclaringTypeName(), methodSign.getMethod().getName(), "Ended.....");
+		log.doLog(2, methodSign.getDeclaringType().getSimpleName(), methodSign.getMethod().getName(),
+				"Time taken to Execute is :" + timeTaken);
+		log.doLog(2, methodSign.getDeclaringType().getSimpleName(), methodSign.getMethod().getName(), "Ended.....");
 		return obj;
 	}
 	

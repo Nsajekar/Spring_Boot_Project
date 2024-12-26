@@ -7,6 +7,8 @@ import org.springframework.jdbc.core.BeanPropertyRowMapper;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Repository;
 
+import com.spring.main.model.CommonRequestBean;
+import com.spring.main.model.CommonResponseBean;
 import com.spring.main.model.DataBean;
 
 @Repository
@@ -25,6 +27,30 @@ public class CommonRestDaoImpl implements CommonRestDao {
 			e.printStackTrace();
 		}
 		return queryForList;
+	}
+
+	@Override
+	public int logRequest(CommonRequestBean<?> reqBean, String requestType) {
+		// TODO Auto-generated method stub
+		return 0;
+	}
+
+	@Override
+	public int logRequest(StringBuilder requestData, String requestType) {
+		// TODO Auto-generated method stub
+		return 0;
+	}
+
+	@Override
+	public int logResponse(CommonResponseBean<?> respBean, String requestType) {
+		// TODO Auto-generated method stub
+		return 0;
+	}
+
+	@Override
+	public int logResponse(Object result, String requestType) {
+		// TODO Auto-generated method stub
+		return 0;
 	}
 	
 }
