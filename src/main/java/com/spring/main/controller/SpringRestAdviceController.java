@@ -19,22 +19,23 @@ public class SpringRestAdviceController {
 	
 	private static final Logger logger = LogManager.getLogger(SpringRestAdviceController.class);
 	
-	@ExceptionHandler(Exception.class)
-	public ResponseEntity<String> handleException(Exception ex) {
-		logger.error(ex.getLocalizedMessage(), ex);
-		return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Internal Server Error");
-	}
-	
 	@ExceptionHandler(Throwable.class)
 	public ResponseEntity<String> handleThrows(Throwable ex) {
 		logger.error(ex.getLocalizedMessage(), ex);
 		return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Internal Server Error");
 	}
 
+	@ExceptionHandler(Exception.class)
+	public ResponseEntity<String> handleException(Exception ex) {
+		logger.error(ex.getLocalizedMessage(), ex);
+		return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(ex.getLocalizedMessage());
+	}
+	
+
 	@ExceptionHandler(RateLimitReachedException.class)
     public ResponseEntity<?> rateLimitReachedException(Exception ex) {
     	logger.error(ex.getLocalizedMessage(), ex);
-        return ResponseEntity.status(HttpStatus.TOO_MANY_REQUESTS).body(ex.getMessage());
+        return ResponseEntity.status(HttpStatus.TOO_MANY_REQUESTS).body(ex.getLocalizedMessage());
     }
 	
 

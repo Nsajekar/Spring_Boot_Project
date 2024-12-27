@@ -1,5 +1,7 @@
 package com.spring.main.model;
 
+import org.springframework.beans.BeanUtils;
+
 import com.google.gson.Gson;
 
 import lombok.AccessLevel;
@@ -23,6 +25,11 @@ public class CommonRequestBean <T>{
 	String requestTimeStamp;
 	
 	T requestData;
+	
+	public CommonRequestBean(T requestData, CommonRequestBean<?> reqBean) {
+		BeanUtils.copyProperties(reqBean, this);
+		this.requestData = requestData;
+	}
 
 	@Override
 	public String toString() {

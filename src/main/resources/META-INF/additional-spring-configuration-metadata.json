@@ -83,5 +83,10 @@
     "name": "resilience4j.ratelimiter.instanses.default.limit-refresh-period",
     "type": "java.lang.String",
     "description": "A description for 'resilience4j.ratelimiter.instanses.default.limit-refresh-period'"
+  },
+  {
+    "name": "request.encryption.decryption.flag",
+    "type": "java.lang.String",
+    "description": "A description for 'request.encryption.decryption.flag'"
   }
 ]}
