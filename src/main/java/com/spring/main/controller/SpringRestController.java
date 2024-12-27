@@ -24,6 +24,7 @@ public class SpringRestController {
 	CommonRestService commonRestService;
 
 	/**
+	 * Returns Data From Database
 	 * @return
 	 */
 	@GetMapping(value = "/getDetails", produces = MediaType.APPLICATION_JSON_VALUE)

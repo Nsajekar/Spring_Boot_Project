@@ -27,9 +27,20 @@ public class CommonResponseBean <T>{
 	T responseData;
 	
 	public CommonResponseBean(T data) {
-		responseData = data;
+		this.responseData = data;
 	}
 
+	public CommonResponseBean(String responseCode,String responseMessage) {
+		this.responseCode = responseCode;
+		this.responseMessage = responseMessage;
+	}
+	
+	public CommonResponseBean(String responseCode,String responseMessage,T data) {
+		this.responseCode = responseCode;
+		this.responseMessage = responseMessage;
+		this.responseData = data;
+	}
+	
 	@Override
 	public String toString() {
 		try {
