@@ -9,6 +9,7 @@ import org.aspectj.lang.annotation.Aspect;
 import org.aspectj.lang.reflect.MethodSignature;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Component;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -18,7 +19,6 @@ import org.springframework.web.bind.annotation.PutMapping;
 import com.google.gson.Gson;
 import com.spring.main.constants.MasterConstants;
 import com.spring.main.model.CommonRequestBean;
-import com.spring.main.model.CommonResponseBean;
 import com.spring.main.service.CommonRestService;
 import com.spring.main.utils.CommonUtils;
 import com.spring.main.utils.LoggerUtils;
@@ -50,7 +50,7 @@ public class RestCommonAspect {
 		boolean isWrapperReuest = false;
 		String requestType = "";
 		CommonRequestBean<?> reqBean = new CommonRequestBean<>();
-		CommonResponseBean<?> respBean = new CommonResponseBean<>();
+		ResponseEntity<?> respBean = null;
 		StringBuilder requestData = new StringBuilder();
 		
 		MethodSignature methodSign = (MethodSignature) joinPoint.getSignature();
@@ -103,8 +103,8 @@ public class RestCommonAspect {
 		loggerUtils.doLog(MasterConstants.LTI, method.getDeclaringClass().getSimpleName(), method.getName(),"Exited with Response : " + loggerUtils.logResponse(result));
 
 		//TODO - STORE IN DB TABLE
-		if(result instanceof CommonResponseBean) {
-			respBean = (CommonResponseBean<?>) result;
+		if(result instanceof ResponseEntity) {
+			respBean = (ResponseEntity<?>) result;
 			respBean = commonUtils.processResponseBean(reqBean, respBean);
 			commonRestService.logResponse(respBean,requestType);
 			return respBean;

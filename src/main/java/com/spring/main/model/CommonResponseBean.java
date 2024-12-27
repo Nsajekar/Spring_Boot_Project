@@ -25,6 +25,10 @@ public class CommonResponseBean <T>{
 	String responseMessage;
 	
 	T responseData;
+	
+	public CommonResponseBean(T data) {
+		responseData = data;
+	}
 
 	@Override
 	public String toString() {
