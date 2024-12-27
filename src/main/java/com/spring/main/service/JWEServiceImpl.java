@@ -4,7 +4,6 @@ import java.security.interfaces.RSAPrivateKey;
 import java.security.interfaces.RSAPublicKey;
 import java.text.ParseException;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Component;
 
@@ -27,13 +26,27 @@ import lombok.experimental.FieldDefaults;
 @FieldDefaults(level = AccessLevel.PRIVATE)
 public class JWEServiceImpl implements JWEService {
 	
-	@Autowired
 	@Qualifier("consumerPublicKey")
-	private RSAPublicKey consumerPublicKey;
-
-	@Autowired
+	final RSAPublicKey consumerPublicKey;
+	
 	@Qualifier("clientPrivateKey")
-	private RSAPrivateKey clientPrivateKey;
+	final RSAPrivateKey clientPrivateKey;
+
+	public JWEServiceImpl( RSAPublicKey consumerPublicKey,RSAPrivateKey clientPrivateKey) {
+		this.consumerPublicKey = consumerPublicKey;
+		this.clientPrivateKey = clientPrivateKey;
+	}
+
+	/**
+	 * Encryption Logic
+	 * @param payloadToEncryptAndSign
+	 * @return
+	 */
+	@Override
+	public String jweEncryptAndSign(String payloadToEncryptAndSign) {
+		// TODO Auto-generated method stub
+		return null;
+	}
 
 	/**
 	 * De-cryption Logic
@@ -87,4 +100,5 @@ public class JWEServiceImpl implements JWEService {
 		jweObject.decrypt(new RSADecrypter(privatekey));
 		return jweObject.getPayload().toString();
 	}
+
 }

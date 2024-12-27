@@ -7,8 +7,6 @@ import org.aspectj.lang.ProceedingJoinPoint;
 import org.aspectj.lang.annotation.Around;
 import org.aspectj.lang.annotation.Aspect;
 import org.aspectj.lang.reflect.MethodSignature;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Component;
@@ -17,9 +15,8 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 
-import com.en.axis.api.beans.response.CustomResponseBean;
+import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.google.gson.Gson;
 import com.spring.main.constants.MasterConstants;
 import com.spring.main.model.CommonRequestBean;
 import com.spring.main.model.CommonResponseBean;
@@ -39,30 +36,24 @@ public class RestCommonAspect {
 	@Value("${request.encryption.decryption.flag}")
 	boolean encrDecrFlag;
 
-	@Autowired
-	CommonRestService commonRestService;
-	
-	@Autowired
-	CommonUtils commonUtils;
-	
-	@Autowired
-	LoggerUtils loggerUtils;
-	
-	@Autowired
-	JWEService jweService; 
+	final CommonRestService commonRestService;
+	final CommonUtils commonUtils;
+	final LoggerUtils loggerUtils;
+	final JWEService jweService; 
 
-	@Qualifier("gson")
-	@Autowired
-	Gson gson; 
-	
-	//TODO - ADD ENCRYPTION/DICRYPTION LOGIC FOR REQUEST RESPONSE		
+	public RestCommonAspect(CommonRestService commonRestService, CommonUtils commonUtils,
+			LoggerUtils loggerUtils, JWEService jweService) {
+		this.commonRestService = commonRestService;
+		this.commonUtils = commonUtils;
+		this.loggerUtils = loggerUtils;
+		this.jweService = jweService;
+	}
+
 	@Around("!@within(com.spring.main.annotation.IgnoreAop) && com.spring.main.aspect.PointcutExpressionsUtil.forControllerLog()")
 	public Object processRequestResponse(ProceedingJoinPoint joinPoint) throws Throwable{
 		boolean isWrapperReuest = false;
 		StringBuilder requestData = new StringBuilder();
 		CommonRequestBean<?> reqBody = new CommonRequestBean<>();
-		CommonResponseBean<?> respBody = new CommonResponseBean<>();
-		ResponseEntity<?> respBean = null;
 		Object result = null;
 		
 		MethodSignature methodSign = (MethodSignature) joinPoint.getSignature();
@@ -80,57 +71,55 @@ public class RestCommonAspect {
 				}
 			}
 		}
-		
-		//TODO - CHECK DUPLICATE REQUEST REFERENCE NUMBER 
-		if(isWrapperReuest) {
-			if(encrDecrFlag) {
-				try {
-					String decryptedRequestString = jweService.jweVerifyAndDecrypt(reqBody.getRequestData().toString());
-					reqBody = new CommonRequestBean<Object>(decryptedRequestString, reqBody);
-				} catch (Exception e) {
-					throw new Exception(e);
-				}
-			}
-			//TODO - STORE IN DB TABLE
-			commonRestService.logRequest(reqBody,requestType);
-		}else {
-			commonRestService.logRequest(requestData,requestType);
-		}
-
 		//LOG REQUEST
 		loggerUtils.doLog(MasterConstants.LTI, method.getDeclaringClass().getSimpleName(), method.getName(),"Entered With Parameters : " + loggerUtils.logRequest(args));
 		
-		try {
+		if (isWrapperReuest) {
+			//TODO - CHECK DUPLICATE REQUEST REFERENCE NUMBER 
+			//TODO - STORE IN DB TABLE
+			commonRestService.logRequest(reqBody, requestType);
+			if (encrDecrFlag) {
+				String decryptedRequestString = jweService.jweVerifyAndDecrypt(reqBody.getRequestData().toString());
+				reqBody = new CommonRequestBean<>(decryptedRequestString, reqBody);
+				result = joinPoint.proceed(new Object[] { reqBody });
+			} else {
+				result = joinPoint.proceed();
+			}
+		} else {
+			//TODO - STORE IN DB TABLE
+			commonRestService.logRequest(requestData,requestType);
 			result = joinPoint.proceed();
-		}catch (Exception e) {
-           throw e;
 		}
 		
 		//LOG RESPONSE
 		loggerUtils.doLog(MasterConstants.LTI, method.getDeclaringClass().getSimpleName(), method.getName(),"Exited with Response : " + loggerUtils.logResponse(result));
+		return processResponse(reqBody, result, requestType);
+	}
 
-		//TODO - STORE IN DB TABLE
+	private Object processResponse(CommonRequestBean<?> reqBody, Object result, String requestType) throws JsonProcessingException {
+		CommonResponseBean<?> respBody;
+		ResponseEntity<?> respBean;
 		if(result instanceof ResponseEntity) {
 			respBean = (ResponseEntity<?>) result;
+			//TODO - STORE IN DB TABLE
 			commonRestService.logResponse(respBean,requestType);
-			if(encrDecrFlag) { //TODO- NOT VERIFIED
-				if(respBean.getBody() instanceof CommonResponseBean) {
-					ObjectMapper mapper = new ObjectMapper();
-					respBody = (CommonResponseBean<?>)respBean.getBody(); 
-					String toEncryptString = mapper.writeValueAsString(respBody.getResponseData());
-					String response = respBody.getResponseData() != null ? jweService.jweEncryptAndSign(toEncryptString) : "";
-					respBody = new CommonResponseBean<String>(response);
-					respBean = 
-				}
+			//TODO - ADD ENCRYPTION LOGIC FOR REQUEST 
+			Object responseBody = respBean.getBody();
+			if (encrDecrFlag && responseBody instanceof CommonResponseBean) {
+				ObjectMapper mapper = new ObjectMapper();
+				respBody = (CommonResponseBean<?>) responseBody;
+				String toEncryptString = mapper.writeValueAsString(respBody.getResponseData());
+				String response = respBody.getResponseData() != null ? jweService.jweEncryptAndSign(toEncryptString): "";
+				respBody = new CommonResponseBean<>(response);
+				respBean = ResponseEntity.ok(respBody);
 			}
 			respBean = commonUtils.processResponseBean(reqBody, respBean);
-			 //TODO - ADD ENCRYPTION LOGIC FOR REQUEST 
 			return respBean;
 		}else {
+			//TODO - STORE IN DB TABLE
 			commonRestService.logResponse(result,requestType);
 			return result;
 		}
-		
 	}
 
 	private String getRequestType(Method method) {

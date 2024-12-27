@@ -24,7 +24,7 @@ public class CommonUtils {
 	public ResponseEntity<?> processResponseBean(CommonRequestBean<?> fromBean, ResponseEntity<?> toBean) {
 		CommonResponseBean<?> responseBeanData = new CommonResponseBean<>();
 		Object toBeanData = toBean.getBody();
-		if(toBean.getBody() instanceof CommonResponseBean) {
+		if(toBeanData instanceof CommonResponseBean) {
 			responseBeanData = (CommonResponseBean<?>) toBeanData;
 		}
 		BeanUtils.copyProperties(toBeanData,responseBeanData);
