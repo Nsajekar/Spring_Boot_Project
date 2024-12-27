@@ -5,11 +5,13 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import com.spring.main.annotation.Log;
 import com.spring.main.model.CommonRequestBean;
 import com.spring.main.model.CommonResponseBean;
 import com.spring.main.model.DataBean;
 import com.spring.main.repository.CommonRestDao;
 
+@Log
 @Service
 public class CommonRestServiceImpl implements CommonRestService{
 	

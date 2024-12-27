@@ -7,10 +7,12 @@ import org.springframework.jdbc.core.BeanPropertyRowMapper;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Repository;
 
+import com.spring.main.annotation.Log;
 import com.spring.main.model.CommonRequestBean;
 import com.spring.main.model.CommonResponseBean;
 import com.spring.main.model.DataBean;
 
+@Log
 @Repository
 public class CommonRestDaoImpl implements CommonRestDao {
 	

@@ -45,7 +45,7 @@ public class RestCommonAspect {
 	Gson gson; 
 	
 	//TODO - ADD ENCRYPTION/DICRYPTION LOGIC FOR REQUEST RESPONSE		
-	@Around("com.spring.main.aspect.PointcutExpressionsUtil.forControllerLog()")
+	@Around("!@within(com.spring.main.annotation.IgnoreAop) && com.spring.main.aspect.PointcutExpressionsUtil.forControllerLog()")
 	public Object processRequestResponse(ProceedingJoinPoint joinPoint) throws Throwable{
 		boolean isWrapperReuest = false;
 		String requestType = "";
@@ -92,7 +92,12 @@ public class RestCommonAspect {
 		//LOG REQUEST
 		loggerUtils.doLog(MasterConstants.LTI, method.getDeclaringClass().getSimpleName(), method.getName(),"Entered With Parameters : " + loggerUtils.logRequest(args));
 		
-		Object result = joinPoint.proceed();
+		Object result = null;
+		try {
+			result = joinPoint.proceed();
+		}catch (Exception e) {
+           throw e;
+		}
 		
 		//LOG RESPONSE
 		loggerUtils.doLog(MasterConstants.LTI, method.getDeclaringClass().getSimpleName(), method.getName(),"Exited with Response : " + loggerUtils.logResponse(result));
