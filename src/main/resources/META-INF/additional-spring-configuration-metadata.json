@@ -68,5 +68,35 @@
     "name": "LOG_PATTERN",
     "type": "java.lang.String",
     "description": "A description for 'LOG_PATTERN'"
+  },
+  {
+    "name": "annotation.logging.aspect.enable",
+    "type": "java.lang.String",
+    "description": "Valid Values true/false"
+  },
+  {
+    "name": "resilience4j.ratelimiter.instanses.default.limit-for-period",
+    "type": "java.lang.String",
+    "description": "A description for 'resilience4j.ratelimiter.instanses.default.limit-for-period'"
+  },
+  {
+    "name": "resilience4j.ratelimiter.instanses.default.limit-refresh-period",
+    "type": "java.lang.String",
+    "description": "A description for 'resilience4j.ratelimiter.instanses.default.limit-refresh-period'"
+  },
+  {
+    "name": "request.encryption.decryption.flag",
+    "type": "java.lang.String",
+    "description": "A description for 'request.encryption.decryption.flag'"
+  },
+  {
+    "name": "client.private.key",
+    "type": "java.lang.String",
+    "description": "A description for 'client.private.key'"
+  },
+  {
+    "name": "consumer.public.key",
+    "type": "java.lang.String",
+    "description": "A description for 'consumer.public.key'"
   }
 ]}
