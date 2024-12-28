@@ -33,7 +33,7 @@ public class SpringRestAdviceController {
 	}
 	
 	@ExceptionHandler(RateLimitReachedException.class)
-    public ResponseEntity<?> rateLimitReachedException(Exception ex) {
+    public ResponseEntity<String> rateLimitReachedException(Exception ex) {
     	logger.error(ex.getLocalizedMessage(), ex);
         return ResponseEntity.status(HttpStatus.TOO_MANY_REQUESTS).body(ex.getLocalizedMessage());
     }

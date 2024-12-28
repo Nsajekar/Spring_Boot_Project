@@ -17,4 +17,8 @@ public interface CommonRestService {
 	int logResponse(CommonResponseBean<?> respBean, String requestType);
 
 	int logResponse(Object result, String requestType);
+
+	CommonRequestBean<String> encryptData(CommonRequestBean<DataBean> requestBean) throws Throwable;
+
+	CommonRequestBean<DataBean> decryptData(CommonRequestBean<String> requestBean) throws Throwable;
 }
