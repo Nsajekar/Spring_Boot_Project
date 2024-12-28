@@ -17,12 +17,13 @@ import io.swagger.v3.oas.annotations.Hidden;
 @Hidden
 public class SpringRestAdviceController {
 	
+	//TODO - ADD HANDLERS FOR CUSTOME AS WELL AS PREBUILT EXCEPTIONS 
 	private static final Logger logger = LogManager.getLogger(SpringRestAdviceController.class);
 	
 	@ExceptionHandler(Throwable.class)
 	public ResponseEntity<String> handleThrows(Throwable ex) {
 		logger.error(ex.getLocalizedMessage(), ex);
-		return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Internal Server Error");
+		return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(ex.getLocalizedMessage());
 	}
 
 	@ExceptionHandler(Exception.class)
@@ -31,7 +32,6 @@ public class SpringRestAdviceController {
 		return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(ex.getLocalizedMessage());
 	}
 	
-
 	@ExceptionHandler(RateLimitReachedException.class)
     public ResponseEntity<?> rateLimitReachedException(Exception ex) {
     	logger.error(ex.getLocalizedMessage(), ex);

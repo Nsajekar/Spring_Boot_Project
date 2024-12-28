@@ -105,7 +105,6 @@ public class RestCommonAspect {
 			respBean = (ResponseEntity<?>) result;
 			//TODO - STORE IN DB TABLE
 			commonRestService.logResponse(respBean,requestType);
-			//TODO - ADD ENCRYPTION LOGIC FOR REQUEST 
 			Object responseBody = respBean.getBody();
 			if (encrDecrFlag && responseBody instanceof CommonResponseBean) {
 				ObjectMapper mapper = new ObjectMapper();
@@ -114,8 +113,8 @@ public class RestCommonAspect {
 				String response = respBody.getResponseData() != null ? jweService.jweEncryptAndSign(toEncryptString): "";
 				respBody = new CommonResponseBean<>(response);
 				respBean = ResponseEntity.ok(respBody);
+				respBean = commonUtils.processResponseBean(reqBody, respBean);
 			}
-			respBean = commonUtils.processResponseBean(reqBody, respBean);
 			return respBean;
 		}else {
 			//TODO - STORE IN DB TABLE
