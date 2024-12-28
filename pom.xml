@@ -98,6 +98,10 @@
 			<artifactId>nimbus-jose-jwt</artifactId>
 			<version>9.47</version>
 		</dependency>
+		<dependency>
+			<groupId>org.apache.commons</groupId>
+			<artifactId>commons-lang3</artifactId>
+		</dependency>
 	</dependencies>
 
 	<build>

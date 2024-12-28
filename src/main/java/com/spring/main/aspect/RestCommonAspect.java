@@ -1,6 +1,7 @@
 package com.spring.main.aspect;
 
 import java.lang.reflect.Method;
+import java.security.NoSuchAlgorithmException;
 
 import org.apache.commons.lang3.StringUtils;
 import org.aspectj.lang.ProceedingJoinPoint;
@@ -17,6 +18,7 @@ import org.springframework.web.bind.annotation.PutMapping;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.nimbusds.jose.JOSEException;
 import com.spring.main.constants.MasterConstants;
 import com.spring.main.model.CommonRequestBean;
 import com.spring.main.model.CommonResponseBean;
@@ -96,7 +98,7 @@ public class RestCommonAspect {
 		return processResponse(reqBody, result, requestType);
 	}
 
-	private Object processResponse(CommonRequestBean<?> reqBody, Object result, String requestType) throws JsonProcessingException {
+	private Object processResponse(CommonRequestBean<?> reqBody, Object result, String requestType) throws JsonProcessingException, NoSuchAlgorithmException, JOSEException {
 		CommonResponseBean<?> respBody;
 		ResponseEntity<?> respBean;
 		if(result instanceof ResponseEntity) {

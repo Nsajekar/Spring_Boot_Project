@@ -88,5 +88,15 @@
     "name": "request.encryption.decryption.flag",
     "type": "java.lang.String",
     "description": "A description for 'request.encryption.decryption.flag'"
+  },
+  {
+    "name": "client.private.key",
+    "type": "java.lang.String",
+    "description": "A description for 'client.private.key'"
+  },
+  {
+    "name": "consumer.public.key",
+    "type": "java.lang.String",
+    "description": "A description for 'consumer.public.key'"
   }
 ]}
