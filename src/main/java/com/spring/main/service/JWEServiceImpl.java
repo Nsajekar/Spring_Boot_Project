@@ -112,7 +112,7 @@ public class JWEServiceImpl implements JWEService {
 			try {
 				return jweDecrypt(clientPrivateKey, jwVerifyObject.getPayloadAfterVerification());
 			} catch (Exception e) {
-				throw new DecryptionException("Exception Occured In Decryption : "+e.getMessage());
+				throw new DecryptionException("Exception Occured In Decryption : "+ e);
 			}
 		}else {
 			throw new CryptographyException();
@@ -134,7 +134,7 @@ public class JWEServiceImpl implements JWEService {
 		boolean isVerified = jwsObject.verify(jwsVerifier);
 		jwVerifyObject.setSignatureValid(isVerified);
 		if(isVerified) {
-			jwVerifyObject.setPayloadAfterVerification(payloadToVerifyAndDecrypt);
+			jwVerifyObject.setPayloadAfterVerification(jwsObject.getPayload().toString());
 		}
 		return jwVerifyObject;
 	}
