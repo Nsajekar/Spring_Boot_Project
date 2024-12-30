@@ -10,7 +10,6 @@ import org.springframework.stereotype.Service;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.spring.main.annotation.Log;
 import com.spring.main.model.CommonRequestBean;
-import com.spring.main.model.CommonResponseBean;
 import com.spring.main.model.DataBean;
 import com.spring.main.repository.CommonRestDao;
 
@@ -32,16 +31,6 @@ public class CommonRestServiceImpl implements CommonRestService{
 	@Override
 	public int logRequest(CommonRequestBean<?> reqBean, String requestType) {
 		return commonRestDao.logRequest(reqBean,requestType);
-	}
-
-	@Override
-	public int logRequest(StringBuilder requestData, String requestType) {
-		return commonRestDao.logRequest(requestData,requestType);
-	}
-
-	@Override
-	public int logResponse(CommonResponseBean<?> respBean, String requestType) {
-		return commonRestDao.logResponse(respBean,requestType);
 	}
 
 	@Override

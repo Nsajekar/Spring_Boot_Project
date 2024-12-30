@@ -2,7 +2,6 @@ package com.spring.main.controller;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
-import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -10,7 +9,6 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.spring.main.annotation.IgnoreAop;
 import com.spring.main.model.CommonRequestBean;
-import com.spring.main.model.CommonResponseBean;
 import com.spring.main.model.DataBean;
 import com.spring.main.service.CommonRestService;
 
@@ -35,7 +33,4 @@ public class EncryptionDecryptionController {
 		return commonRestService.decryptData(requestBean);
 	}
 	
-	public ResponseEntity<CommonResponseBean<String>> encrypt(CommonRequestBean<DataBean> requestBean){
-		return null;
-	}
 }

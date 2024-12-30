@@ -9,7 +9,6 @@ import org.springframework.stereotype.Repository;
 
 import com.spring.main.annotation.Log;
 import com.spring.main.model.CommonRequestBean;
-import com.spring.main.model.CommonResponseBean;
 import com.spring.main.model.DataBean;
 
 @Log
@@ -39,12 +38,6 @@ public class CommonRestDaoImpl implements CommonRestDao {
 
 	@Override
 	public int logRequest(StringBuilder requestData, String requestType) {
-		// TODO Auto-generated method stub
-		return 0;
-	}
-
-	@Override
-	public int logResponse(CommonResponseBean<?> respBean, String requestType) {
 		// TODO Auto-generated method stub
 		return 0;
 	}
