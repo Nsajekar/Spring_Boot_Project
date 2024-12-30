@@ -13,8 +13,8 @@ public interface CommonRestService {
 
 	int logResponse(Object result, String requestType);
 
-	CommonRequestBean<String> encryptData(CommonRequestBean<DataBean> requestBean) throws Throwable;
+	CommonRequestBean<Object> encryptData(CommonRequestBean<Object> requestBean) throws Throwable;
 
-	CommonRequestBean<DataBean> decryptData(CommonRequestBean<String> requestBean) throws Throwable;
+	CommonRequestBean<Object> decryptData(CommonRequestBean<Object> requestBean) throws Throwable;
 
 }

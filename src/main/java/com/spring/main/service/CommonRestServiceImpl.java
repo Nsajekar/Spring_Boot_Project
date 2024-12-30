@@ -39,24 +39,20 @@ public class CommonRestServiceImpl implements CommonRestService{
 	}
 
 	@Override
-	public CommonRequestBean<String> encryptData(CommonRequestBean<DataBean> requestBean)throws Throwable {
+	public CommonRequestBean<Object> encryptData(CommonRequestBean<Object> requestBean)throws Throwable {
 		ObjectMapper mapper = new ObjectMapper();
 		String toEncryptString = mapper.writeValueAsString(requestBean.getRequestData());
 		String response = jweService.jweEncryptAndSign(toEncryptString);
-		return new CommonRequestBean<>(requestBean.getPartitionId(),
-										requestBean.getRequestRefNo(),
-										new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(new Date()),
-										response);
+		requestBean.setRequestData(response);
+		requestBean.setRequestTimeStamp(new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(new Date()));
+		return requestBean;
 	}
 
 	@Override
-	public CommonRequestBean<DataBean> decryptData(CommonRequestBean<String> requestBean) throws Throwable {
-		ObjectMapper mapper = new ObjectMapper();
-		String decryptedRequestString = jweService.jweVerifyAndDecrypt(requestBean.getRequestData());
-		return new CommonRequestBean<>(requestBean.getPartitionId(),
-										requestBean.getRequestRefNo(),
-										requestBean.getRequestTimeStamp(),
-										mapper.readValue(decryptedRequestString, DataBean.class));
+	public CommonRequestBean<Object> decryptData(CommonRequestBean<Object> requestBean) throws Throwable {
+		String decryptedRequestString = jweService.jweVerifyAndDecrypt(requestBean.getRequestData().toString());
+		requestBean.setRequestData(decryptedRequestString);
+		return requestBean;
 	}
 
 }
