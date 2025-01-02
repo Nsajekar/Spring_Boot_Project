@@ -56,7 +56,7 @@ public class SpringRestController {
 	 * @throws Exception 
 	 */
 	@PostMapping(value = "/commonRequestReponsePostMethod", produces = MediaType.APPLICATION_JSON_VALUE)
-	public ResponseEntity<CommonResponseBean<?>> commonRequestReponsePostMethod(@RequestBody CommonRequestBean<Object> requestData) throws Exception {
+	public ResponseEntity<CommonResponseBean<?>> commonRequestReponsePostMethod(@RequestBody @Valid CommonRequestBean<Object> requestData) throws Exception {
 		String methodName = "commonRequestReponsePostMethod";
 		CommonRequestBean<DataBean> responseData = commonUtils.getBeanFromObject(requestData, DataBean.class);
 		loggerUtils.doLog(MasterConstants.LTI, className, methodName, responseData.toString());

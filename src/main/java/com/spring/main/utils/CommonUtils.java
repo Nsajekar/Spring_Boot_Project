@@ -7,6 +7,7 @@ import java.util.Map;
 
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.BeanUtils;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Component;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -20,9 +21,15 @@ import com.spring.main.annotation.Log;
 import com.spring.main.model.CommonRequestBean;
 import com.spring.main.model.CommonResponseBean;
 
+import jakarta.annotation.Resource;
+
 @Log
 @Component
 public class CommonUtils {
+	
+	@Autowired
+	@Resource(name = "customErrorMap")
+	private Map<String, String> errorMap;
 
 	/**
 	 * Generic method to copy request & response bean
@@ -85,5 +92,17 @@ public class CommonUtils {
 			requestType = "DEFAULT";
 		}
 		return requestType;
+	}
+
+	@Log(logIgnore = true)
+	public String getErrorMessages(String errorCode, String fieldName) {
+		String messageCode = "";
+		if(StringUtils.isNotBlank(errorCode)) {
+			messageCode = errorMap.get(errorCode);
+			if(StringUtils.contains(messageCode, "{Key_Name}")) {
+				messageCode = StringUtils.replace(messageCode, "{Key_Name}", fieldName);
+			}
+		} 
+		return messageCode;
 	}
 }

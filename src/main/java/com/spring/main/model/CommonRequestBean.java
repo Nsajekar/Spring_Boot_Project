@@ -4,7 +4,9 @@ import org.springframework.beans.BeanUtils;
 import org.springframework.context.annotation.Scope;
 
 import com.google.gson.Gson;
+import com.spring.main.constants.MasterConstants;
 
+import jakarta.validation.Valid;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import lombok.AccessLevel;
@@ -20,14 +22,25 @@ import lombok.experimental.FieldDefaults;
 @Scope(scopeName = "request")
 public class CommonRequestBean <T>{
 
-	@NotNull(message = "Value Should Not Be NULL!")
-	@NotBlank(message = "Value Should Not Be Blanck!")
+	@NotNull(message = MasterConstants.ErrorResponseCodes.REQ_DATA)
+	@NotBlank(message = MasterConstants.ErrorResponseCodes.REQ_DATA)
 	String requestRefNo;
 
-	@NotNull(message = "Value Should Not Be NULL!")
-	@NotBlank(message = "Value Should Not Be Blanck!")
+	@NotNull(message = MasterConstants.ErrorResponseCodes.REQ_DATA)
+	@NotBlank(message = MasterConstants.ErrorResponseCodes.REQ_DATA)
 	String requestTimeStamp;
 	
+	@NotNull(message = MasterConstants.ErrorResponseCodes.REQ_DATA)
+	@NotBlank(message = MasterConstants.ErrorResponseCodes.REQ_DATA)
+	String apiID;
+	
+	@NotNull(message = MasterConstants.ErrorResponseCodes.REQ_DATA)
+	@NotBlank(message = MasterConstants.ErrorResponseCodes.REQ_DATA)
+	String apiPassword;
+	
+//	@NotNull(message = MasterConstants.ErrorResponseCodes.REQ_DATA)
+//	@NotBlank(message = MasterConstants.ErrorResponseCodes.REQ_DATA)
+	@Valid
 	T requestData;
 	
 	public CommonRequestBean(T requestData, CommonRequestBean<?> reqBean) {

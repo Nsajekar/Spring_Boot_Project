@@ -12,9 +12,12 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.core.io.Resource;
+import org.springframework.validation.beanvalidation.LocalValidatorFactoryBean;
 
 import com.google.gson.Gson;
 import com.spring.main.utils.RSAUtils;
+
+import jakarta.validation.Validator;
 
 @Configuration
 public class SpringBootConfiguration {
@@ -41,6 +44,11 @@ public class SpringBootConfiguration {
 	@Bean("consumerPublicKey")
 	RSAPublicKey consumerPublicKey() throws NoSuchAlgorithmException, CertificateException, IOException, InvalidKeySpecException {
 		return rsaUtils.getRSAPublicKey(publicKeyPath);
+	}
+	
+	@Bean(name = "validator")
+	Validator validator() {
+		return new LocalValidatorFactoryBean(); 
 	}
 	
 }

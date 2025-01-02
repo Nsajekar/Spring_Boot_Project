@@ -93,7 +93,8 @@ public class RestCommonAspect {
 		commonRestService.logRequest(reqBody, requestType);
 		
 		if (isWrapperReuest) {
-			//TODO - CHECK DUPLICATE REQUEST REFERENCE NUMBER 
+			//TODO - CHECK API ID AND PASSWORD HERE
+			//TODO - CHECK DUPLICATE REQUEST REFERENCE NUMBER
 			if (encrDecrFlag) {
 				String decryptedRequestString = jweService.jweVerifyAndDecrypt(reqBody.getRequestData().toString());
 				reqBody = new CommonRequestBean<>(decryptedRequestString, reqBody);

@@ -9,6 +9,7 @@ import java.util.HashMap;
 
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.MethodParameter;
 import org.springframework.http.HttpInputMessage;
 import org.springframework.http.HttpStatus;
@@ -27,6 +28,7 @@ import com.spring.main.exception.RateLimitReachedException;
 import com.spring.main.model.CommonRequestBean;
 import com.spring.main.model.CommonResponseBean;
 import com.spring.main.model.ErrorResponseBean;
+import com.spring.main.utils.CommonUtils;
 
 import io.swagger.v3.oas.annotations.Hidden;
 
@@ -38,6 +40,9 @@ public class SpringRestAdviceController implements RequestBodyAdvice{
 	protected CommonRequestBean<?> reqBody = null;
 	
 	private static final Logger logger = LogManager.getLogger(SpringRestAdviceController.class);
+	
+	@Autowired
+	CommonUtils commonUtils;
 	
 	@ExceptionHandler(Throwable.class)
 	public ResponseEntity<String> handleThrows(Throwable ex) {
@@ -78,11 +83,11 @@ public class SpringRestAdviceController implements RequestBodyAdvice{
 				CommonResponseBean<Object> responseBean = new CommonResponseBean<>();
 				responseBean.setRequestRefNo(reqBody.getRequestRefNo());
 				responseBean.setResponseTimeStamp(new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(new Date()));
-				responseBean.setResponseCode(HttpStatus.BAD_REQUEST.toString());
 				responseBean.setResponseData(new HashMap<>());
 				for (ObjectError error : errors.getAllErrors()) {
 					String fieldName = ((FieldError) error).getField();
-					responseBean.setResponseMessage("Error Occured For Field : " + fieldName + " " + error.getDefaultMessage());
+					responseBean.setResponseCode(error.getDefaultMessage());
+					responseBean.setResponseMessage(commonUtils.getErrorMessages(error.getDefaultMessage(),fieldName));
 					responseEntity = ResponseEntity.ok(responseBean);
 				}
 			} else {
@@ -92,7 +97,7 @@ public class SpringRestAdviceController implements RequestBodyAdvice{
 				errorResponseBean.setResponseCode(HttpStatus.BAD_REQUEST.toString());
 				for (ObjectError error : errors.getAllErrors()) {
 					String fieldName = ((FieldError) error).getField();
-					errorResponseBean.setResponseMessage("Error Occured For Field : " + fieldName + " " + error.getDefaultMessage());
+					errorResponseBean.setResponseMessage(commonUtils.getErrorMessages(error.getDefaultMessage(),fieldName));
 					responseEntity = ResponseEntity.status(HttpStatus.BAD_REQUEST).body(errorResponseBean);
 				}
 			}
