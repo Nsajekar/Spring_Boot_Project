@@ -55,11 +55,24 @@ public class SpringRestController {
 	 * @throws Exception 
 	 */
 	@PostMapping(value = "/commonRequestReponsePostMethod", produces = MediaType.APPLICATION_JSON_VALUE)
-	public ResponseEntity<CommonResponseBean<?>> getDetailsForDataBean(@RequestBody CommonRequestBean<Object> requestData) throws Exception {
-		String methodName = "getDetailsForDataBean";
+	public ResponseEntity<CommonResponseBean<?>> commonRequestReponsePostMethod(@RequestBody CommonRequestBean<Object> requestData) throws Exception {
+		String methodName = "commonRequestReponsePostMethod";
 		CommonRequestBean<DataBean> responseData = commonUtils.getBeanFromObject(requestData, DataBean.class);
 		loggerUtils.doLog(MasterConstants.LTI, className, methodName, responseData.toString());
 		return ResponseEntity.ok(new CommonResponseBean<>("000","SUCCESS",commonRestService.getDataList()));
+	}
+	
+	/**
+	 * Returns Data From Database
+	 * @return
+	 * @throws Exception 
+	 */
+	@PostMapping(value = "/commonRequestReponsePostMethodWithoutResponseEntity", produces = MediaType.APPLICATION_JSON_VALUE)
+	public CommonResponseBean<?> commonRequestReponsePostMethodWithoutResponseEntity(@RequestBody CommonRequestBean<Object> requestData) throws Exception {
+		String methodName = "commonRequestReponsePostMethodWithoutResponseEntity";
+		CommonRequestBean<DataBean> responseData = commonUtils.getBeanFromObject(requestData, DataBean.class);
+		loggerUtils.doLog(MasterConstants.LTI, className, methodName, responseData.toString());
+		return new CommonResponseBean<>("000","SUCCESS",commonRestService.getDataList());
 	}
 
 }
