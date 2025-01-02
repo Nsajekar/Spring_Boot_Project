@@ -1,9 +1,12 @@
 package com.spring.main.model;
 
 import org.springframework.beans.BeanUtils;
+import org.springframework.context.annotation.Scope;
 
 import com.google.gson.Gson;
 
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -14,14 +17,15 @@ import lombok.experimental.FieldDefaults;
 @NoArgsConstructor
 @AllArgsConstructor
 @FieldDefaults(level = AccessLevel.PRIVATE)
+@Scope(scopeName = "request")
 public class CommonRequestBean <T>{
 
-	//TODO - ADD VALIDATION USING @VALID
-	
-	String partitionId;
-	
+	@NotNull(message = "Value Should Not Be NULL!")
+	@NotBlank(message = "Value Should Not Be Blanck!")
 	String requestRefNo;
 
+	@NotNull(message = "Value Should Not Be NULL!")
+	@NotBlank(message = "Value Should Not Be Blanck!")
 	String requestTimeStamp;
 	
 	T requestData;

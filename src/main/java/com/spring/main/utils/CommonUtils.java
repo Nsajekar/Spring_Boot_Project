@@ -38,7 +38,6 @@ public class CommonUtils {
 			responseBeanData = (CommonResponseBean<?>) toBeanData;
 		}
 		BeanUtils.copyProperties(toBeanData,responseBeanData);
-		responseBeanData.setPartitionId(fromBean.getPartitionId());
 		responseBeanData.setRequestRefNo(fromBean.getRequestRefNo());
 		responseBeanData.setResponseTimeStamp(new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(new Date()));
 		return ResponseEntity.ok(responseBeanData);
@@ -51,7 +50,6 @@ public class CommonUtils {
 	 * @throws Exception 
 	 */
 	public <T,K>CommonResponseBean<K> processResponseBean(CommonRequestBean<T> reqBody, CommonResponseBean<K> respBody) {
-        respBody.setPartitionId(reqBody.getPartitionId());
         respBody.setRequestRefNo(reqBody.getRequestRefNo());
         respBody.setResponseTimeStamp(new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(new Date()));
 		return respBody;
@@ -68,6 +66,7 @@ public class CommonUtils {
 		return reqBean;
 	}
 	
+	@Log(logIgnore = true)
 	public String getRequestType(Method method) {
 		String requestType;
 		if (method.isAnnotationPresent(GetMapping.class)) {

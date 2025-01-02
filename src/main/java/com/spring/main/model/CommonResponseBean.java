@@ -14,8 +14,6 @@ import lombok.experimental.FieldDefaults;
 @FieldDefaults(level = AccessLevel.PRIVATE)
 public class CommonResponseBean <T>{
 
-	String partitionId;
-	
 	String requestRefNo;
 
 	String responseTimeStamp;

@@ -18,6 +18,7 @@ public class CommonRestDaoImpl implements CommonRestDao {
 	@Autowired
 	JdbcTemplate jdbcTemplate;
 
+	@Log(logReturn = true)
 	@Override
 	public List<DataBean> getDataList() {
 		List<DataBean> queryForList = null;
@@ -30,18 +31,21 @@ public class CommonRestDaoImpl implements CommonRestDao {
 		return queryForList;
 	}
 
+	@Log(logReturn = true)
 	@Override
 	public int logRequest(CommonRequestBean<?> reqBean, String requestType) {
 		// TODO Auto-generated method stub
 		return 0;
 	}
 
+	@Log(logReturn = true)
 	@Override
 	public int logRequest(StringBuilder requestData, String requestType) {
 		// TODO Auto-generated method stub
 		return 0;
 	}
 
+	@Log(logReturn = true)
 	@Override
 	public int logResponse(Object result, String requestType) {
 		// TODO Auto-generated method stub

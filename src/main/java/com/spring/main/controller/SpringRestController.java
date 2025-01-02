@@ -19,6 +19,7 @@ import com.spring.main.utils.CommonUtils;
 import com.spring.main.utils.LoggerUtils;
 
 import io.swagger.v3.oas.annotations.tags.Tag;
+import jakarta.validation.Valid;
 import lombok.AccessLevel;
 import lombok.experimental.FieldDefaults;
 
@@ -68,7 +69,7 @@ public class SpringRestController {
 	 * @throws Exception 
 	 */
 	@PostMapping(value = "/commonRequestReponsePostMethodWithoutResponseEntity", produces = MediaType.APPLICATION_JSON_VALUE)
-	public CommonResponseBean<?> commonRequestReponsePostMethodWithoutResponseEntity(@RequestBody CommonRequestBean<Object> requestData) throws Exception {
+	public CommonResponseBean<?> commonRequestReponsePostMethodWithoutResponseEntity(@RequestBody @Valid CommonRequestBean<Object> requestData) throws Exception {
 		String methodName = "commonRequestReponsePostMethodWithoutResponseEntity";
 		CommonRequestBean<DataBean> responseData = commonUtils.getBeanFromObject(requestData, DataBean.class);
 		loggerUtils.doLog(MasterConstants.LTI, className, methodName, responseData.toString());

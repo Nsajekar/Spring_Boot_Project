@@ -89,8 +89,8 @@ public class RestCommonAspect {
 			}
 		}
 		//LOG REQUEST
-		commonRestService.logRequest(reqBody, requestType);
 		loggerUtils.doLog(MasterConstants.LTI, method.getDeclaringClass().getSimpleName(), method.getName(),"Entered With Parameters : " + loggerUtils.logRequest(args));
+		commonRestService.logRequest(reqBody, requestType);
 		
 		if (isWrapperReuest) {
 			//TODO - CHECK DUPLICATE REQUEST REFERENCE NUMBER 
@@ -107,8 +107,7 @@ public class RestCommonAspect {
 		
 		//LOG RESPONSE
 		commonRestService.logResponse(result, requestType);
-		loggerUtils.doLog(MasterConstants.LTI, method.getDeclaringClass().getSimpleName(), method.getName(),"Exited with Response : " + loggerUtils.logResponse(result));
-		return processResponse(reqBody, result, requestType);
+		return processResponse(reqBody, result, requestType,method);
 	}
 
 	/**
@@ -121,13 +120,12 @@ public class RestCommonAspect {
 	 * @param reqBody
 	 * @param result
 	 * @param requestType
+	 * @param method 
 	 * @return
-	 * @throws JsonProcessingException
-	 * @throws NoSuchAlgorithmException
-	 * @throws JOSEException
+	 * @throws Exception 
 	 */
-	private Object processResponse(CommonRequestBean<?> reqBody, Object result, String requestType)
-			throws JsonProcessingException, NoSuchAlgorithmException, JOSEException {
+	private Object processResponse(CommonRequestBean<?> reqBody, Object result, String requestType, Method method)
+			throws Exception {
 		CommonResponseBean<?> respBody = new CommonResponseBean<>();
 		
 		if (result instanceof ResponseEntity) {
@@ -149,6 +147,7 @@ public class RestCommonAspect {
 			respBody = commonUtils.processResponseBean(reqBody, respBody);
 			result = respBody;
 		}
+		loggerUtils.doLog(MasterConstants.LTI, method.getDeclaringClass().getSimpleName(), method.getName(),"Exited with Response : " + loggerUtils.logResponse(result));
 		return result;
 	}
 
