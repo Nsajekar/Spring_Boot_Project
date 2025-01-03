@@ -3,8 +3,6 @@ package com.spring.main.controller;
 import java.io.IOException;
 import java.lang.reflect.Type;
 import java.text.MessageFormat;
-import java.text.SimpleDateFormat;
-import java.util.Date;
 import java.util.HashMap;
 
 import org.apache.logging.log4j.LogManager;
@@ -77,22 +75,18 @@ public class SpringRestAdviceController implements RequestBodyAdvice{
 		if (errors.hasErrors()) {
 			logger.info(MessageFormat.format("Errors Found in Request Binding : {0}", errors));
 			if (reqBody != null) {
-				//TODO - CHNAGES NEEDED FOR CUSTOM RESPONSE CODE 
-				//TODO - INSTADE OF BAD REQUEST SHOW CUSTOM ERROR RESPONSE CODE
 				//TODO - SORT ERROR MESSAGES
 				CommonResponseBean<Object> responseBean = new CommonResponseBean<>();
-				responseBean.setRequestRefNo(reqBody.getRequestRefNo());
-				responseBean.setResponseTimeStamp(new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(new Date()));
-				responseBean.setResponseData(new HashMap<>());
 				for (ObjectError error : errors.getAllErrors()) {
 					String fieldName = ((FieldError) error).getField();
 					responseBean.setResponseCode(error.getDefaultMessage());
 					responseBean.setResponseMessage(commonUtils.getErrorMessages(error.getDefaultMessage(),fieldName));
-					responseEntity = ResponseEntity.ok(responseBean);
 				}
+				responseBean.setResponseData(new HashMap<>());
+				responseBean = commonUtils.processResponseBean(reqBody, responseBean);
+				responseEntity = ResponseEntity.ok(responseBean);
 			} else {
 				//TODO - SORT ERROR MESSAGES
-				//TODO - INSTADE OF BAD REQUEST SHOW CUSTOM ERROR RESPONSE CODE
 				ErrorResponseBean errorResponseBean = new ErrorResponseBean();
 				errorResponseBean.setResponseCode(HttpStatus.BAD_REQUEST.toString());
 				for (ObjectError error : errors.getAllErrors()) {

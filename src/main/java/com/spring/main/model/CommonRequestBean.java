@@ -38,8 +38,7 @@ public class CommonRequestBean <T>{
 	@NotBlank(message = MasterConstants.ErrorResponseCodes.REQ_DATA)
 	String apiPassword;
 	
-//	@NotNull(message = MasterConstants.ErrorResponseCodes.REQ_DATA)
-//	@NotBlank(message = MasterConstants.ErrorResponseCodes.REQ_DATA)
+	@NotNull(message = MasterConstants.ErrorResponseCodes.REQ_DATA)
 	@Valid
 	T requestData;
 	

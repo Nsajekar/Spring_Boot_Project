@@ -4,6 +4,7 @@ import java.util.List;
 
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -22,6 +23,9 @@ import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import lombok.AccessLevel;
 import lombok.experimental.FieldDefaults;
+import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+
 
 @RestController
 @Tag(name = "Spring Rest Controller", description = "Spring Boot Rest API")
@@ -74,6 +78,28 @@ public class SpringRestController {
 		CommonRequestBean<DataBean> responseData = commonUtils.getBeanFromObject(requestData, DataBean.class);
 		loggerUtils.doLog(MasterConstants.LTI, className, methodName, responseData.toString());
 		return new CommonResponseBean<>("000","SUCCESS",commonRestService.getDataList());
+	}
+	
+	/**
+	 * FOR TESTING PERPOSE
+	 * @param id
+	 * @param requestData
+	 * @return
+	 */
+	@PutMapping("/putMapping/{id}")
+	public ResponseEntity<CommonResponseBean<?>> updateUser(@PathVariable int id,@RequestBody @Valid CommonRequestBean<Object> requestData) {
+		return ResponseEntity.ok(new CommonResponseBean<>("000","ID : "+ id,requestData));
+	}
+	
+	/**
+	 * FOR TESTING PERPOSE
+	 * @param id
+	 * @param requestData
+	 * @return
+	 */
+	@DeleteMapping("/deleteMapping/{id}")
+	public ResponseEntity<CommonResponseBean<?>> deleteUser(@PathVariable int id,@RequestBody @Valid CommonRequestBean<Object> requestData) {
+		return ResponseEntity.ok(new CommonResponseBean<>("000","ID : "+ id,requestData));
 	}
 
 }
