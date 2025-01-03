@@ -3,7 +3,7 @@ package com.spring.main.service;
 import java.util.List;
 
 import com.spring.main.model.CommonRequestBean;
-import com.spring.main.model.DataBean;
+import com.spring.main.model.entity.DataBean;
 
 public interface CommonRestService {
 

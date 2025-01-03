@@ -34,7 +34,7 @@ public class SpringBootProjectApplication{
 	@Bean
 	CommandLineRunner commandLineRunner(String [] args) {
 		return runner -> {
-			System.out.println("Hello Spring Boot...");
+			logger.info("Hello Spring Boot...");
 		};
 	}
 	

@@ -6,7 +6,9 @@ import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -14,7 +16,7 @@ import org.springframework.web.bind.annotation.RestController;
 import com.spring.main.constants.MasterConstants;
 import com.spring.main.model.CommonRequestBean;
 import com.spring.main.model.CommonResponseBean;
-import com.spring.main.model.DataBean;
+import com.spring.main.model.entity.DataBean;
 import com.spring.main.service.CommonRestService;
 import com.spring.main.utils.CommonUtils;
 import com.spring.main.utils.LoggerUtils;
@@ -23,8 +25,6 @@ import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import lombok.AccessLevel;
 import lombok.experimental.FieldDefaults;
-import org.springframework.web.bind.annotation.PutMapping;
-import org.springframework.web.bind.annotation.PathVariable;
 
 
 @RestController

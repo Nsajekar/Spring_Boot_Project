@@ -1,4 +1,4 @@
-package com.spring.main.model;
+package com.spring.main.model.entity;
 
 import com.google.gson.Gson;
 
