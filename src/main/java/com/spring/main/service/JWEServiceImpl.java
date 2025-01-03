@@ -57,6 +57,7 @@ public class JWEServiceImpl implements JWEService {
 	 * @throws NoSuchAlgorithmException 
 	 * @throws JOSEException 
 	 */
+	@Log(logParameter = true,logReturn = true)
 	@Override
 	public String jweEncryptAndSign(String payloadToEncryptAndSign) throws NoSuchAlgorithmException, JOSEException {
 		JWEAlgorithm algorithm = JWEAlgorithm.RSA_OAEP_256;
@@ -105,6 +106,7 @@ public class JWEServiceImpl implements JWEService {
 	 * @param payloadToVerifyAndDecrypt
 	 * @return
 	 */
+	@Log(logParameter = true,logReturn = true)
 	@Override
 	public String jweVerifyAndDecrypt(String payloadToVerifyAndDecrypt) throws ParseException, JOSEException {
 		JWVerifyObject jwVerifyObject = jwSignatureVerify(consumerPublicKey, payloadToVerifyAndDecrypt);

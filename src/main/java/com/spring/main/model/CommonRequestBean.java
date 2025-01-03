@@ -1,9 +1,14 @@
 package com.spring.main.model;
 
 import org.springframework.beans.BeanUtils;
+import org.springframework.context.annotation.Scope;
 
 import com.google.gson.Gson;
+import com.spring.main.constants.MasterConstants;
 
+import jakarta.validation.Valid;
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -14,16 +19,27 @@ import lombok.experimental.FieldDefaults;
 @NoArgsConstructor
 @AllArgsConstructor
 @FieldDefaults(level = AccessLevel.PRIVATE)
+@Scope(scopeName = "request")
 public class CommonRequestBean <T>{
 
-	//TODO - ADD VALIDATION USING @VALID
-	
-	String partitionId;
-	
+	@NotNull(message = MasterConstants.ErrorResponseCodes.REQ_DATA)
+	@NotBlank(message = MasterConstants.ErrorResponseCodes.REQ_DATA)
 	String requestRefNo;
 
+	@NotNull(message = MasterConstants.ErrorResponseCodes.REQ_DATA)
+	@NotBlank(message = MasterConstants.ErrorResponseCodes.REQ_DATA)
 	String requestTimeStamp;
 	
+	@NotNull(message = MasterConstants.ErrorResponseCodes.REQ_DATA)
+	@NotBlank(message = MasterConstants.ErrorResponseCodes.REQ_DATA)
+	String apiID;
+	
+	@NotNull(message = MasterConstants.ErrorResponseCodes.REQ_DATA)
+	@NotBlank(message = MasterConstants.ErrorResponseCodes.REQ_DATA)
+	String apiPassword;
+	
+	@NotNull(message = MasterConstants.ErrorResponseCodes.REQ_DATA)
+	@Valid
 	T requestData;
 	
 	public CommonRequestBean(T requestData, CommonRequestBean<?> reqBean) {

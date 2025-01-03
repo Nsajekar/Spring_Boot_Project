@@ -33,7 +33,7 @@
 
 	<Loggers>
 		<!-- Custom Logger -->
-		<Logger name="com.spring" level="info" additivity="false">
+		<Logger name="com.spring" level="debug" additivity="false">
 			<AppenderRef ref="consoleLog" />
 			<AppenderRef ref="appLog" />
 		</Logger>

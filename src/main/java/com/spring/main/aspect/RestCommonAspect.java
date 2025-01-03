@@ -3,7 +3,6 @@ package com.spring.main.aspect;
 import java.lang.reflect.Method;
 import java.security.NoSuchAlgorithmException;
 
-import org.apache.commons.lang3.StringUtils;
 import org.aspectj.lang.ProceedingJoinPoint;
 import org.aspectj.lang.annotation.Around;
 import org.aspectj.lang.annotation.Aspect;
@@ -11,10 +10,6 @@ import org.aspectj.lang.reflect.MethodSignature;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Component;
-import org.springframework.web.bind.annotation.DeleteMapping;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.PutMapping;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -30,6 +25,18 @@ import com.spring.main.utils.LoggerUtils;
 import lombok.AccessLevel;
 import lombok.experimental.FieldDefaults;
 
+/**
+ * @author nsajekar
+ * 
+ * @version 1.0
+ * 
+ * @since 02-01-2025
+ * 
+ * {@summary - }
+ * This Class Is Only For Rest Controllers If Any Class Inside [com.spring.main.controller] Package
+ * will Implement This Aspect Class If You Want To Ignore This Class to Your Controller You Need 
+ * To Annotate Your Class With [@IgnoreAop] Annotation.
+ */
 @Aspect
 @Component
 @FieldDefaults(level = AccessLevel.PRIVATE)
@@ -51,6 +58,14 @@ public class RestCommonAspect {
 		this.jweService = jweService;
 	}
 
+	/**
+	 * This @around Method Will Work On com.spring.main.controller Package And 
+	 * Also Encrypt/Decrypt Request Body
+	 * 
+	 * @param joinPoint
+	 * @return
+	 * @throws Throwable
+	 */
 	@Around("!@within(com.spring.main.annotation.IgnoreAop) && com.spring.main.aspect.PointcutExpressionsUtil.forControllerLog()")
 	public Object processRequestResponse(ProceedingJoinPoint joinPoint) throws Throwable{
 		boolean isWrapperReuest = false;
@@ -60,7 +75,7 @@ public class RestCommonAspect {
 		
 		MethodSignature methodSign = (MethodSignature) joinPoint.getSignature();
 		Method method = methodSign.getMethod();
-		String requestType = getRequestType(method);
+		String requestType = commonUtils.getRequestType(method);
 		
 		Object[] args = joinPoint.getArgs();
 		if(args.length > 0){
@@ -75,11 +90,11 @@ public class RestCommonAspect {
 		}
 		//LOG REQUEST
 		loggerUtils.doLog(MasterConstants.LTI, method.getDeclaringClass().getSimpleName(), method.getName(),"Entered With Parameters : " + loggerUtils.logRequest(args));
+		commonRestService.logRequest(reqBody, requestType);
 		
 		if (isWrapperReuest) {
-			//TODO - CHECK DUPLICATE REQUEST REFERENCE NUMBER 
-			//TODO - STORE IN DB TABLE
-			commonRestService.logRequest(reqBody, requestType);
+			//TODO - CHECK API ID AND PASSWORD HERE
+			//TODO - CHECK DUPLICATE REQUEST REFERENCE NUMBER
 			if (encrDecrFlag) {
 				String decryptedRequestString = jweService.jweVerifyAndDecrypt(reqBody.getRequestData().toString());
 				reqBody = new CommonRequestBean<>(decryptedRequestString, reqBody);
@@ -88,58 +103,61 @@ public class RestCommonAspect {
 				result = joinPoint.proceed();
 			}
 		} else {
-			//TODO - STORE IN DB TABLE
-			commonRestService.logRequest(requestData,requestType);
 			result = joinPoint.proceed();
 		}
 		
 		//LOG RESPONSE
-		loggerUtils.doLog(MasterConstants.LTI, method.getDeclaringClass().getSimpleName(), method.getName(),"Exited with Response : " + loggerUtils.logResponse(result));
-		return processResponse(reqBody, result, requestType);
+		commonRestService.logResponse(result, requestType);
+		return processResponse(reqBody, result, requestType,method);
 	}
 
-	private Object processResponse(CommonRequestBean<?> reqBody, Object result, String requestType) throws JsonProcessingException, NoSuchAlgorithmException, JOSEException {
-		CommonResponseBean<?> respBody;
-		ResponseEntity<?> respBean;
-		if(result instanceof ResponseEntity) {
-			respBean = (ResponseEntity<?>) result;
-			//TODO - STORE IN DB TABLE
-			commonRestService.logResponse(respBean,requestType);
-			Object responseBody = respBean.getBody();
-			if (encrDecrFlag && responseBody instanceof CommonResponseBean) {
-				ObjectMapper mapper = new ObjectMapper();
+	/**
+	 * TEST CASE 1 : WHEN RESPONSE TYPE IS [ANY] 
+	 * TEST CASE 2 : WHEN RESPONSE TYPE IS [RESPONSEENTITY<T>] 
+	 * 				 & REQUEST DATA <T> IS OF TYPE [COMMONRESPONSEBEAN<T1>] 
+	 *     			 & REQUEST DATA <T1> IS ENCRYPTED/NORMAL 
+	 * TEST CASE 3 : WHEN RESPONSE TYPE IS [COMMONRESPONSEBEAN<T>] 
+	 *  			 & REQUEST DATA <T> IS ENCRYPTED/NORMAL
+	 * @param reqBody
+	 * @param result
+	 * @param requestType
+	 * @param method 
+	 * @return
+	 * @throws Exception 
+	 */
+	private Object processResponse(CommonRequestBean<?> reqBody, Object result, String requestType, Method method)
+			throws Exception {
+		CommonResponseBean<?> respBody = new CommonResponseBean<>();
+		
+		if (result instanceof ResponseEntity) {
+			ResponseEntity<?> responseEntity = (ResponseEntity<?>) result;
+			Object responseBody = responseEntity.getBody();
+			if (responseBody instanceof CommonResponseBean) {
 				respBody = (CommonResponseBean<?>) responseBody;
-				String toEncryptString = mapper.writeValueAsString(respBody.getResponseData());
-				String response = respBody.getResponseData() != null ? jweService.jweEncryptAndSign(toEncryptString): "";
-				respBody = new CommonResponseBean<>(response);
-				respBean = ResponseEntity.ok(respBody);
-				respBean = commonUtils.processResponseBean(reqBody, respBean);
+				if (encrDecrFlag) {
+					respBody = encryptResponse(reqBody, respBody);
+				}
+				respBody = commonUtils.processResponseBean(reqBody, respBody);
+				result = ResponseEntity.ok(respBody);
 			}
-			return respBean;
-		}else {
-			//TODO - STORE IN DB TABLE
-			commonRestService.logResponse(result,requestType);
-			return result;
+		} else if (result instanceof CommonResponseBean) {
+			respBody = (CommonResponseBean<?>) result;
+			if (encrDecrFlag) {
+				respBody = encryptResponse(reqBody, respBody);
+			}
+			respBody = commonUtils.processResponseBean(reqBody, respBody);
+			result = respBody;
 		}
+		loggerUtils.doLog(MasterConstants.LTI, method.getDeclaringClass().getSimpleName(), method.getName(),"Exited with Response : " + loggerUtils.logResponse(result));
+		return result;
 	}
 
-	private String getRequestType(Method method) {
-		String requestType;
-		if (method.isAnnotationPresent(GetMapping.class)) {
-			GetMapping annotation = method.getAnnotation(GetMapping.class);
-			requestType = StringUtils.replace(annotation.value()[0], "/", "");
-		} else if (method.isAnnotationPresent(PostMapping.class)) {
-			PostMapping annotation = method.getAnnotation(PostMapping.class);
-			requestType = StringUtils.replace(annotation.value()[0], "/", "");
-		}else if (method.isAnnotationPresent(PutMapping.class)) {
-			PutMapping annotation = method.getAnnotation(PutMapping.class);
-			requestType = StringUtils.replace(annotation.value()[0], "/", "");
-		}else if (method.isAnnotationPresent(DeleteMapping.class)) {
-			DeleteMapping annotation = method.getAnnotation(DeleteMapping.class);
-			requestType = StringUtils.replace(annotation.value()[0], "/", "");
-		} else {
-			requestType = "DEFAULT";
-		}
-		return requestType;
+	private CommonResponseBean<?> encryptResponse(CommonRequestBean<?> reqBody, CommonResponseBean<?> respBody)
+			throws JsonProcessingException, NoSuchAlgorithmException, JOSEException {
+		String toEncryptString = new ObjectMapper().writeValueAsString(respBody.getResponseData());
+		String response = respBody.getResponseData() != null ? jweService.jweEncryptAndSign(toEncryptString): "";
+		respBody = new CommonResponseBean<>(respBody.getResponseCode(),respBody.getResponseMessage(),response);
+		return respBody;
 	}
+
 }
