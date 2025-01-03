@@ -41,7 +41,13 @@ public class DataBaseConfig {
 	@Value("${app.datasource.active}")
 	String activeDatabase;
 	
-    @Bean
+	@Value("${jpa.database-platform.mariadb}")
+    String jpaPlatformMariaDb;
+    
+	@Value("${jpa.database-platform.mysql}")
+    String jpaPlatformMySql;
+    
+	@Bean
     DataSource dataSource() throws IllegalArgumentException {
         DriverManagerDataSource dataSource = new DriverManagerDataSource();
         if("MARIADB".equals(activeDatabase)) {
@@ -49,11 +55,13 @@ public class DataBaseConfig {
         	dataSource.setUsername(mariaUsr);
         	dataSource.setPassword(mariaPwd);
         	dataSource.setDriverClassName(mariaDrivarName);
+        	System.setProperty("spring.jpa.database-platform", jpaPlatformMariaDb);
         }else if("MYSQL".equals(activeDatabase)) {
         	dataSource.setUrl(mysqlUrl);
         	dataSource.setUsername(mysqlUsr);
         	dataSource.setPassword(mysqlPwd);
         	dataSource.setDriverClassName(mysqlDrivarName);
+        	System.setProperty("spring.jpa.database-platform", jpaPlatformMySql);
         }else {
         	throw new IllegalArgumentException("Unsupported Database :!" + activeDatabase);
         }
