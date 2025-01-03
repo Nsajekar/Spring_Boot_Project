@@ -24,7 +24,7 @@ public class CommonRequestBean <T>{
 
 	@NotNull(message = MasterConstants.ErrorResponseCodes.REQ_DATA)
 	@NotBlank(message = MasterConstants.ErrorResponseCodes.REQ_DATA)
-	String requestRefNo;
+	long requestRefNo;
 
 	@NotNull(message = MasterConstants.ErrorResponseCodes.REQ_DATA)
 	@NotBlank(message = MasterConstants.ErrorResponseCodes.REQ_DATA)

@@ -45,7 +45,7 @@ public class CommonUtils {
 			responseBeanData = (CommonResponseBean<?>) toBeanData;
 		}
 		BeanUtils.copyProperties(toBeanData,responseBeanData);
-		responseBeanData.setRequestRefNo(fromBean.getRequestRefNo());
+		responseBeanData.setRequestRefNo(String.valueOf(fromBean.getRequestRefNo()));
 		responseBeanData.setResponseTimeStamp(new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(new Date()));
 		return ResponseEntity.ok(responseBeanData);
 	}
@@ -57,7 +57,7 @@ public class CommonUtils {
 	 * @throws Exception 
 	 */
 	public <T,K>CommonResponseBean<K> processResponseBean(CommonRequestBean<T> reqBody, CommonResponseBean<K> respBody) {
-        respBody.setRequestRefNo(reqBody.getRequestRefNo());
+        respBody.setRequestRefNo(String.valueOf(reqBody.getRequestRefNo()));
         respBody.setResponseTimeStamp(new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(new Date()));
 		return respBody;
 	}
