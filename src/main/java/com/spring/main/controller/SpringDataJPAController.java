@@ -14,6 +14,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.spring.main.model.entity.Student;
 import com.spring.main.repository.EntityManagerExampleDao;
+import com.spring.main.repository.JpaRepositoryExample;
 
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.AccessLevel;
@@ -52,10 +53,12 @@ import lombok.experimental.FieldDefaults;
 public class SpringDataJPAController {
 	
 	EntityManagerExampleDao entityManagerExampleDao;
+	JpaRepositoryExample jpaRepositoryExample;
 	
-	public SpringDataJPAController(EntityManagerExampleDao entityManagerExampleDao) {
+	public SpringDataJPAController(EntityManagerExampleDao entityManagerExampleDao, JpaRepositoryExample jpaRepositoryExample) {
 		super();
 		this.entityManagerExampleDao = entityManagerExampleDao;
+		this.jpaRepositoryExample = jpaRepositoryExample;
 	}
 
 	@GetMapping("/findById/{id}")
