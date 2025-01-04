@@ -1,6 +1,15 @@
 package com.spring.main.controller;
 
+import java.util.List;
+
+import org.springframework.web.bind.annotation.DeleteMapping;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.spring.main.model.entity.Student;
@@ -9,11 +18,6 @@ import com.spring.main.repository.EntityManagerExampleDao;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.AccessLevel;
 import lombok.experimental.FieldDefaults;
-
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
 
 /**
  * @author Nitesh
@@ -59,11 +63,39 @@ public class SpringDataJPAController {
 		return entityManagerExampleDao.findById(id);
 	}
 	
+	@GetMapping("/findAll")
+	public List<Student> findAll() {
+		return entityManagerExampleDao.findAll();
+	}
+	
+	@GetMapping("/findByLastName/{lastName}")
+	public List<Student> findByLastName(@PathVariable String lastName) {
+		return entityManagerExampleDao.findByLastName(lastName);
+	}
+	
 	@PostMapping("/addStudent")
 	public String addStudent(@RequestBody Student entity) {
 		entityManagerExampleDao.save(entity);
 		return String.valueOf(entity.getId());
 	}
 	
+	@PutMapping("/updateStudent/{id}")
+	public Student updateStudent(@PathVariable int id,@RequestParam(required = true) String lastName) {
+		Student student = entityManagerExampleDao.findById(id);
+		student.setLastName(lastName);
+		entityManagerExampleDao.update(student);
+		return entityManagerExampleDao.findById(id);
+	}
+	
+	@DeleteMapping("/deleteStudent/{id}")
+	public String updateStudent(@PathVariable int id) {
+		entityManagerExampleDao.delete(id);
+		return String.valueOf(id);
+	}
+	
+	@DeleteMapping("/deleteStudentByID/{id}")
+	public int deleteStudentByID(@PathVariable int id) {
+		return entityManagerExampleDao.deleteById(id);
+	}
 	
 }
