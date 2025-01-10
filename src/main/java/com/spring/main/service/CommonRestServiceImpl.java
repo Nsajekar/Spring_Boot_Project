@@ -10,7 +10,7 @@ import org.springframework.stereotype.Service;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.spring.main.annotation.Log;
 import com.spring.main.model.CommonRequestBean;
-import com.spring.main.model.DataBean;
+import com.spring.main.model.entity.DataBean;
 import com.spring.main.repository.CommonRestDao;
 
 @Log

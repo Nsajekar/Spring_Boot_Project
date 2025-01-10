@@ -135,7 +135,7 @@ public class RestCommonAspect {
 			if (responseBody instanceof CommonResponseBean) {
 				respBody = (CommonResponseBean<?>) responseBody;
 				if (encrDecrFlag) {
-					respBody = encryptResponse(reqBody, respBody);
+					respBody = encryptResponse(respBody);
 				}
 				respBody = commonUtils.processResponseBean(reqBody, respBody);
 				result = ResponseEntity.ok(respBody);
@@ -143,7 +143,7 @@ public class RestCommonAspect {
 		} else if (result instanceof CommonResponseBean) {
 			respBody = (CommonResponseBean<?>) result;
 			if (encrDecrFlag) {
-				respBody = encryptResponse(reqBody, respBody);
+				respBody = encryptResponse( respBody);
 			}
 			respBody = commonUtils.processResponseBean(reqBody, respBody);
 			result = respBody;
@@ -152,7 +152,7 @@ public class RestCommonAspect {
 		return result;
 	}
 
-	private CommonResponseBean<?> encryptResponse(CommonRequestBean<?> reqBody, CommonResponseBean<?> respBody)
+	private CommonResponseBean<?> encryptResponse(CommonResponseBean<?> respBody)
 			throws JsonProcessingException, NoSuchAlgorithmException, JOSEException {
 		String toEncryptString = new ObjectMapper().writeValueAsString(respBody.getResponseData());
 		String response = respBody.getResponseData() != null ? jweService.jweEncryptAndSign(toEncryptString): "";

@@ -2,10 +2,8 @@ package com.spring.main;
 
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
-import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
-import org.springframework.context.annotation.Bean;
 
 /**
  * @author nsajekar
@@ -31,12 +29,4 @@ public class SpringBootProjectApplication{
 		logger.warn("WARN : Application Started...");
 	}
 	
-	@Bean
-	CommandLineRunner commandLineRunner(String [] args) {
-		return runner -> {
-			System.out.println("Hello Spring Boot...");
-		};
-	}
-	
-
 }

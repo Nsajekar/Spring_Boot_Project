@@ -9,7 +9,7 @@ import org.springframework.stereotype.Repository;
 
 import com.spring.main.annotation.Log;
 import com.spring.main.model.CommonRequestBean;
-import com.spring.main.model.DataBean;
+import com.spring.main.model.entity.DataBean;
 
 @Log
 @Repository

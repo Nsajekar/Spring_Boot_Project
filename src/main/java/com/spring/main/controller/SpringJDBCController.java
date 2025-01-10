@@ -10,7 +10,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.spring.main.annotation.RateLimit;
-import com.spring.main.model.DataBean;
+import com.spring.main.model.entity.DataBean;
 import com.spring.main.service.CommonRestService;
 
 import io.swagger.v3.oas.annotations.tags.Tag;
