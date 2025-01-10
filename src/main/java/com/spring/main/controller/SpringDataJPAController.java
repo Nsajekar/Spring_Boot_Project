@@ -1,6 +1,7 @@
 package com.spring.main.controller;
 
 import java.util.List;
+import java.util.Optional;
 
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -17,6 +18,7 @@ import com.spring.main.repository.EntityManagerExampleDao;
 import com.spring.main.repository.JpaRepositoryExample;
 
 import io.swagger.v3.oas.annotations.tags.Tag;
+import jakarta.validation.Valid;
 import lombok.AccessLevel;
 import lombok.experimental.FieldDefaults;
 
@@ -77,7 +79,7 @@ public class SpringDataJPAController {
 	}
 	
 	@PostMapping("/addStudent")
-	public String addStudent(@RequestBody Student entity) {
+	public String addStudent(@RequestBody @Valid Student entity) {
 		entityManagerExampleDao.save(entity);
 		return String.valueOf(entity.getId());
 	}
@@ -99,6 +101,36 @@ public class SpringDataJPAController {
 	@DeleteMapping("/deleteStudentByID/{id}")
 	public int deleteStudentByID(@PathVariable int id) {
 		return entityManagerExampleDao.deleteById(id);
+	}
+	
+	@GetMapping("/findByIdJpaRepository/{id}")
+	public Student findByIdJpaRepository(@PathVariable int id) {
+		Optional<Student> student = jpaRepositoryExample.findById(id);
+		if(student.isPresent()) {
+			return student.get();
+		}
+		return new Student();
+	}
+	
+	@GetMapping("/findAllJpaRepository")
+	public List<Student> findAllJpaRepository() {
+		return jpaRepositoryExample.findAll();
+	}
+	
+	@PostMapping("/addStudentJpaRepository")
+	public Student addStudentJpaRepository(@RequestBody Student entity) {
+		return jpaRepositoryExample.save(entity);
+	}
+	
+	@DeleteMapping("/deleteStudentJpaRepository/{id}")
+	public String updateStudentJpaRepository(@PathVariable int id) {
+		return String.valueOf(entityManagerExampleDao.deleteById(id));
+	}
+	
+	@PutMapping("/updateStudentJpaRepository")
+	public Student updateStudentJpaRepository(@RequestBody Student student) {
+		entityManagerExampleDao.update(student);
+		return student;
 	}
 	
 }
