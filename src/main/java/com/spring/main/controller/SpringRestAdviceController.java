@@ -28,6 +28,7 @@ import com.spring.main.model.ErrorResponseBean;
 import com.spring.main.utils.CommonUtils;
 
 import io.swagger.v3.oas.annotations.Hidden;
+import jakarta.validation.ConstraintViolationException;
 
 @IgnoreAop
 @RestControllerAdvice
@@ -102,6 +103,12 @@ public class SpringRestAdviceController implements RequestBodyAdvice{
 		return responseEntity;
     }
 
+	//TODO - ADD CONSTRAINT VALIDATION & ADD CUSTOME MESSAGE SUPPORT ALSO
+	@ExceptionHandler(ConstraintViolationException.class)
+    public ResponseEntity<?> constraintViolationException(ConstraintViolationException ex) {
+		return null;
+	}
+	
 	@Override
 	public boolean supports(MethodParameter param, Type type,
 			Class<? extends HttpMessageConverter<?>> arg2) {
