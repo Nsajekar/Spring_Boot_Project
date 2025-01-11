@@ -13,6 +13,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.spring.main.model.CommonRequestBean;
 import com.spring.main.model.entity.Student;
 import com.spring.main.repository.EntityManagerExampleDao;
 import com.spring.main.repository.JpaRepositoryExample;
@@ -79,11 +80,12 @@ public class SpringDataJPAController {
 	}
 	
 	@PostMapping("/addStudent")
-	public String addStudent(@RequestBody @Valid Student entity) {
-		entityManagerExampleDao.save(entity);
-		return String.valueOf(entity.getId());
+	public String addStudent(@RequestBody @Valid CommonRequestBean<Student> entity) {
+	    Student student = entity.getRequestData();
+		entityManagerExampleDao.save(student);
+	    return String.valueOf(student.getId());
 	}
-	
+
 	@PutMapping("/updateStudent/{id}")
 	public Student updateStudent(@PathVariable int id,@RequestParam(required = true) String lastName) {
 		Student student = entityManagerExampleDao.findById(id);
