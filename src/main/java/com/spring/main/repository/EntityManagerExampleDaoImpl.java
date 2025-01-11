@@ -39,7 +39,11 @@ public class EntityManagerExampleDaoImpl implements EntityManagerExampleDao {
 	@Override
 	@Transactional
 	public void save(Student student) {
-		entityManager.persist(student);
+		if(student != null) {
+			entityManager.persist(student);
+		}else {
+			entityManager.merge(student);
+		}
 	}
 
 	/**
@@ -47,7 +51,7 @@ public class EntityManagerExampleDaoImpl implements EntityManagerExampleDao {
 	 */
 	@Log(logParameter = true,logReturn = true)
 	@Override
-	public Student findById(int id) {
+	public Student findById(long id) {
 		return entityManager.find(Student.class, id);
 	}
 

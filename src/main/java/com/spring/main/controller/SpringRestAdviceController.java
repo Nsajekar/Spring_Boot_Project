@@ -7,7 +7,6 @@ import java.util.HashMap;
 
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.MethodParameter;
 import org.springframework.http.HttpInputMessage;
 import org.springframework.http.HttpStatus;
@@ -39,9 +38,13 @@ public class SpringRestAdviceController implements RequestBodyAdvice{
 	
 	private static final Logger logger = LogManager.getLogger(SpringRestAdviceController.class);
 	
-	@Autowired
-	CommonUtils commonUtils;
+	final CommonUtils commonUtils;
 	
+	public SpringRestAdviceController(CommonUtils commonUtils) {
+		super();
+		this.commonUtils = commonUtils;
+	}
+
 	@ExceptionHandler(Throwable.class)
 	public ResponseEntity<String> handleThrows(Throwable ex) {
 		logger.error(ex.getLocalizedMessage(), ex);
@@ -73,9 +76,9 @@ public class SpringRestAdviceController implements RequestBodyAdvice{
 		ResponseEntity<?> responseEntity = ResponseEntity.status(HttpStatus.BAD_REQUEST).body(ex.getFieldErrors());
     	BindingResult errors = ex.getBindingResult(); 
 		if (errors.hasErrors()) {
-			logger.info(MessageFormat.format("Errors Found in Request Binding : {0}", errors));
+			logger.info(()->MessageFormat.format("Errors Found in Request Binding : {0}", errors));
 			if (reqBody != null) {
-				//TODO - SORT ERROR MESSAGES
+				//TODO - SORT ERROR MESSAGES ALPHABETICALLY
 				CommonResponseBean<Object> responseBean = new CommonResponseBean<>();
 				for (ObjectError error : errors.getAllErrors()) {
 					String fieldName = ((FieldError) error).getField();
@@ -86,14 +89,14 @@ public class SpringRestAdviceController implements RequestBodyAdvice{
 				responseBean = commonUtils.processResponseBean(reqBody, responseBean);
 				responseEntity = ResponseEntity.ok(responseBean);
 			} else {
-				//TODO - SORT ERROR MESSAGES
+				//TODO - SORT ERROR MESSAGES ALPHABETICALLY
 				ErrorResponseBean errorResponseBean = new ErrorResponseBean();
-				errorResponseBean.setResponseCode(HttpStatus.BAD_REQUEST.toString());
 				for (ObjectError error : errors.getAllErrors()) {
 					String fieldName = ((FieldError) error).getField();
+					errorResponseBean.setResponseCode(error.getDefaultMessage());
 					errorResponseBean.setResponseMessage(commonUtils.getErrorMessages(error.getDefaultMessage(),fieldName));
-					responseEntity = ResponseEntity.status(HttpStatus.BAD_REQUEST).body(errorResponseBean);
 				}
+				responseEntity = ResponseEntity.status(HttpStatus.BAD_REQUEST).body(errorResponseBean);
 			}
 		}
 		return responseEntity;

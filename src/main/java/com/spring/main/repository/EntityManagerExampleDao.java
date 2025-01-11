@@ -8,7 +8,7 @@ public interface EntityManagerExampleDao {
 
 	void save(Student student);
 	
-	Student findById(int id);
+	Student findById(long id);
 	
 	List<Student> findAll();
 	
