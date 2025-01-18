@@ -26,7 +26,6 @@ import jakarta.validation.Payload;
 @Target({ ElementType.FIELD, ElementType.TYPE })
 @Retention(RetentionPolicy.RUNTIME)
 public @interface ValidateField {
-	String fieldName()default "";
 
 	boolean required() default true;
 
@@ -43,4 +42,6 @@ public @interface ValidateField {
 	Class<?>[] groups() default {};
 
 	Class<? extends Payload>[] payload() default {};
+
+	String message() default "{jakarta.validation.constraints.Size.message}";
 }

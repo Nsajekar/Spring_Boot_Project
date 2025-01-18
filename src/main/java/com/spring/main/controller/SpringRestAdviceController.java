@@ -21,6 +21,9 @@ import org.springframework.web.bind.annotation.RestControllerAdvice;
 import org.springframework.web.servlet.mvc.method.annotation.RequestBodyAdvice;
 
 import com.spring.main.annotation.IgnoreAop;
+import com.spring.main.exception.CryptographyException;
+import com.spring.main.exception.DecryptionException;
+import com.spring.main.exception.InvalidRequestException;
 import com.spring.main.exception.RateLimitReachedException;
 import com.spring.main.model.CommonRequestBean;
 import com.spring.main.model.CommonResponseBean;
@@ -28,7 +31,6 @@ import com.spring.main.model.ErrorResponseBean;
 import com.spring.main.utils.CommonUtils;
 
 import io.swagger.v3.oas.annotations.Hidden;
-import jakarta.validation.ConstraintViolationException;
 
 @IgnoreAop
 @RestControllerAdvice
@@ -64,6 +66,23 @@ public class SpringRestAdviceController implements RequestBodyAdvice{
         return ResponseEntity.status(HttpStatus.TOO_MANY_REQUESTS).body(ex.getLocalizedMessage());
     }
 	
+	@ExceptionHandler(InvalidRequestException.class)
+    public ResponseEntity<String> invalidRequestException(InvalidRequestException ex) {
+    	logger.error(ex.getLocalizedMessage(), ex);
+        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(ex.getLocalizedMessage());
+    }
+	
+	@ExceptionHandler(DecryptionException.class)
+    public ResponseEntity<String> decryptionException(DecryptionException ex) {
+    	logger.error(ex.getLocalizedMessage(), ex);
+        return ResponseEntity.status(HttpStatus.UNPROCESSABLE_ENTITY).body(ex.getLocalizedMessage());
+    }
+	
+	@ExceptionHandler(CryptographyException.class)
+    public ResponseEntity<String> cryptographyException(CryptographyException ex) {
+    	logger.error(ex.getLocalizedMessage(), ex);
+        return ResponseEntity.status(HttpStatus.NOT_ACCEPTABLE).body(ex.getLocalizedMessage());
+    }
 	/**
 	 * Method Returns Error Response When Field validation Failed 
 	 * if request body is null the ResponseEntity is type of CommonResponseBean and return it.
@@ -74,7 +93,7 @@ public class SpringRestAdviceController implements RequestBodyAdvice{
 	 */
 	@ExceptionHandler(MethodArgumentNotValidException.class)
     public ResponseEntity<?> methodArgumentNotValidException(MethodArgumentNotValidException ex) {
-		ResponseEntity<?> responseEntity = ResponseEntity.status(HttpStatus.BAD_REQUEST).body(ex.getFieldErrors());
+		ResponseEntity<?> responseEntity = ResponseEntity.status(HttpStatus.OK).body(ex.getFieldErrors());
     	BindingResult errors = ex.getBindingResult(); 
 		if (errors.hasErrors()) {
 			logger.info(()->MessageFormat.format("Errors Found in Request Binding : {0}", errors));
@@ -102,12 +121,6 @@ public class SpringRestAdviceController implements RequestBodyAdvice{
 		}
 		return responseEntity;
     }
-
-	//TODO - ADD CONSTRAINT VALIDATION & ADD CUSTOME MESSAGE SUPPORT ALSO
-	@ExceptionHandler(ConstraintViolationException.class)
-    public ResponseEntity<?> constraintViolationException(ConstraintViolationException ex) {
-		return null;
-	}
 	
 	@Override
 	public boolean supports(MethodParameter param, Type type,

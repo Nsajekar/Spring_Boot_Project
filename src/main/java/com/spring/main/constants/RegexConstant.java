@@ -8,9 +8,10 @@ public enum RegexConstant {
 
 	ALPHANUMERIC("^[a-zA-Z0-9]*$"),
 	ALPHABETS("^[a-zA-Z]*$"),
+	ALPHA_NUMERIC_SPACE("^[a-zA-Z0-9\\s]+$"),
 	NUMERIC("^[0-9]+$"),
+	DECIMAL("^[-+]?\\d*[.]?\\d+|^[-+]?\\d+[.]?\\d*"),
 	EMAIL("^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\\.[a-zA-Z]{2,6}$"),
-	PHONE_NUMBER("^\\d{10}$"),
 	DEFAULT("");
 
 	final String pattern;
