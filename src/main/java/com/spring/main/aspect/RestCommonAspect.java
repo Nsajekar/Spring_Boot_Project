@@ -3,6 +3,7 @@ package com.spring.main.aspect;
 import java.lang.reflect.Method;
 import java.security.NoSuchAlgorithmException;
 
+import org.apache.commons.lang3.StringUtils;
 import org.aspectj.lang.ProceedingJoinPoint;
 import org.aspectj.lang.annotation.Around;
 import org.aspectj.lang.annotation.Aspect;
@@ -15,6 +16,7 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.nimbusds.jose.JOSEException;
 import com.spring.main.constants.MasterConstants;
+import com.spring.main.exception.InvalidRequestException;
 import com.spring.main.model.CommonRequestBean;
 import com.spring.main.model.CommonResponseBean;
 import com.spring.main.service.CommonRestService;
@@ -97,8 +99,12 @@ public class RestCommonAspect {
 			//TODO - CHECK DUPLICATE REQUEST REFERENCE NUMBER
 			if (encrDecrFlag) {
 				String decryptedRequestString = jweService.jweVerifyAndDecrypt(reqBody.getRequestData().toString());
-				reqBody = new CommonRequestBean<>(decryptedRequestString, reqBody);
-				result = joinPoint.proceed(new Object[] { reqBody });
+				if(StringUtils.isNotBlank(decryptedRequestString)) {
+					reqBody = new CommonRequestBean<>(decryptedRequestString, reqBody);
+					result = joinPoint.proceed(new Object[] { reqBody });
+				}else {
+					throw new InvalidRequestException("Invalid Request!");
+				}
 			} else {
 				result = joinPoint.proceed();
 			}
