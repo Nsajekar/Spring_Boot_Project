@@ -99,8 +99,12 @@ public class CommonUtils {
 		String messageCode = "";
 		if(StringUtils.isNotBlank(errorCode)) {
 			messageCode = errorMap.get(errorCode);
-			if(StringUtils.contains(messageCode, "{Key_Name}")) {
-				messageCode = StringUtils.replace(messageCode, "{Key_Name}", fieldName);
+			if(StringUtils.isNotBlank(messageCode)) {
+				if(StringUtils.contains(messageCode, "{Key_Name}")) {
+					messageCode = StringUtils.replace(messageCode, "{Key_Name}", fieldName);
+				}
+			}else {
+				messageCode = errorCode;
 			}
 		} 
 		return messageCode;
