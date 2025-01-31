@@ -6,25 +6,6 @@
     <link rel="stylesheet" href="styles.css">
 	<link rel="icon" href="icon.png" type="image/icon type" width="50">
     <title>Welcome</title>
-	<script>
-		fetch('/html.properties')
-		     .then(response => {
-				if(!response.ok){
-					throw new Error("Unable to load File!");
-				}
-				return response.text();
-			 })
-			 .then(data => {
-				const properties = Object.fromEntries(
-					data.split('\n')
-					    .map(line => line.split('=').map(part => part.trim()))
-						.filter(parts => parts.length === 2)
-				);
-				document.querySelector('button').setAttribute('onclick',`window.open('${properties["index.html.swagger.url"] ||
-				 "http://localhost:7506/api/swagger-ui/index.html"}','_blanck')`);
-			 })
-			 .catch(error => console.error('Error Fetching From Property',error));
-	</script>
 </head>
 <body>
     <main>
@@ -32,7 +13,7 @@
         <div class="content">
 			<img src="icon.png" alt="image/icon type" style="width: 200px; height: 200px; border: outset;">
             <br/>
-            <button type="button">
+            <button onclick="window.open('http://localhost:8008/api/swagger-ui/index.html')">
                 Click Here
             </button>
         </div>
