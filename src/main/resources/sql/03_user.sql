@@ -15,8 +15,3 @@ CREATE TABLE `user_table` (
   `student_roll_number` int NOT NULL DEFAULT 0,
   PRIMARY KEY (`id`, `user_name`)
 ) ENGINE=InnoDB AUTO_INCREMENT=1 DEFAULT CHARSET=latin1;
-
-
-ALTER TABLE student
-ADD student_roll_number int NOT NULL DEFAULT 0, 
-ADD is_allowed BOOLEAN NOT NULL;
